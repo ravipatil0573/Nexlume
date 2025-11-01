@@ -61,7 +61,7 @@
 
 .team-group-image {
     flex: 1;
-    max-width: 50%;
+    max-width: 70%;
 }
 
 .team-group-image img {
@@ -104,130 +104,182 @@
 }
 
 /* Team Cards Section */
-.header-team {
-    text-align: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 40px;
-    font-weight: 400;
-    letter-spacing: -1.2px;
-    line-height: 1.3;
-    transform: scaleX(1.3);
-    padding-bottom: 20px;
+.team-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), 320px);
+  grid-auto-rows: auto;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  --x: 50%;
+  --y: 50%;
+  --r: 220px;
 }
 
-.team-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 60px;
-    justify-content: center;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
+@media (max-width: 1124px) {
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 320px));
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 320px;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
 }
 
 .team-card {
-    width: 100%;
-    max-width: 350px;
-    justify-self: center;
-    background-color: #2a2a2a;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    color: white;
-    transition: transform 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #333;
+  transition: border-color 0.3s ease;
+  background: var(--card-gradient);
+
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(255, 255, 255, 0.3);
 }
 
 .team-card:hover {
-    transform: scale(1.05);
+  border-color: var(--card-border);
 }
 
-.card-image img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    opacity: 1;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.947);
-    filter: grayscale(100%);
-    transition: all 0.8s ease;
-    transform: scale(1);
+.team-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
 }
 
-.card-image img:hover {
-    opacity: 1;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
-    filter: grayscale(0%);
-    transform: scale(1.1);
+.team-card:hover::before {
+  opacity: 1;
 }
 
-.card-info {
-    background-color: #282828;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: relative;
-    overflow: hidden;
-    text-transform: uppercase;
+.team-image-wrapper {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box;
+  background: transparent;
+  transition: background 0.3s ease;
 }
 
-.card-info .info-text {
-    text-align: left;
+.team-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* crop instead of stretch */
+  object-position: center top; /* keep top part visible */
+  border-radius: 10px;
+  display: block;
 }
 
-.card-info h3 {
-    font-family: 'Syne', sans-serif;
-    margin: 0;
-    font-size: 1.2rem;
+.team-card:hover .team-image-wrapper img {
+  transform: scale(1.05);
+}
+.team-info{
+  position: relative;
+  z-index: 1;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 0.25rem;
+  column-gap: 0.75rem;
 }
 
-.card-info p {
-    margin: 5px 0;
-    font-size: 0.8rem;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
+.team-info.role,
+.team-info.handle {
+  color: #aaa;
 }
 
-.card-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    background-color: rgb(199, 223, 255);
-    color: #0077ff;
-    font-size: 1.2rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
+.team-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  backdrop-filter: grayscale(1) brightness(0.78);
+  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+  background: rgba(0, 0, 0, 0.001);
+
+  mask-image: radial-gradient(
+    circle var(--r) at var(--x) var(--y),
+    transparent 0%,
+    transparent 15%,
+    rgba(0, 0, 0, 0.1) 30%,
+    rgba(0, 0, 0, 0.22) 45%,
+    rgba(0, 0, 0, 0.35) 60%,
+    rgba(0, 0, 0, 0.5) 75%,
+    rgba(0, 0, 0, 0.68) 88%,
+    white 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle var(--r) at var(--x) var(--y),
+    transparent 0%,
+    transparent 15%,
+    rgba(0, 0, 0, 0.1) 30%,
+    rgba(0, 0, 0, 0.22) 45%,
+    rgba(0, 0, 0, 0.35) 60%,
+    rgba(0, 0, 0, 0.5) 75%,
+    rgba(0, 0, 0, 0.68) 88%,
+    white 100%
+  );
 }
 
-.card-info .card-button a {
-    text-decoration: none;
-    color: #0022ff;
-}
+.team-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  backdrop-filter: grayscale(1) brightness(0.78);
+  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+  background: rgba(0, 0, 0, 0.001);
 
-.team-card:hover .card-info {
-    background-color: rgb(9, 132, 255);
-}
+  mask-image: radial-gradient(
+    circle var(--r) at var(--x) var(--y),
+    white 0%,
+    white 15%,
+    rgba(255, 255, 255, 0.9) 30%,
+    rgba(255, 255, 255, 0.78) 45%,
+    rgba(255, 255, 255, 0.65) 60%,
+    rgba(255, 255, 255, 0.5) 75%,
+    rgba(255, 255, 255, 0.32) 88%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle var(--r) at var(--x) var(--y),
+    white 0%,
+    white 15%,
+    rgba(255, 255, 255, 0.9) 30%,
+    rgba(255, 255, 255, 0.78) 45%,
+    rgba(255, 255, 255, 0.65) 60%,
+    rgba(255, 255, 255, 0.5) 75%,
+    rgba(255, 255, 255, 0.32) 88%,
+    transparent 100%
+  );
 
-.team-card:hover .card-button {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.card-button:hover {
-    transform: scale(1.2);
-    background-color: #9da5e0;
-    color: white;
-}
-
-.card-button a:hover {
-    color: rgba(3, 53, 255, 0.921);
+  opacity: 1;
+  transition: opacity 0.25s ease;
 }
 
 /* Join Team Section */

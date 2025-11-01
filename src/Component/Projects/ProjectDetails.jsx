@@ -508,7 +508,7 @@ const SectionHeader = ({ title, gradient }) => (
     <div
       className={`w-10 h-10 rounded-full ${gradient} flex items-center justify-center`}
     >
-      <IconComponent className="w-5 h-5" />
+    {IconComponent && <IconComponent className="w-5 h-5" />}
     </div>
     <h2 className="text-3xl font-bold">{title}</h2>
   </div>
