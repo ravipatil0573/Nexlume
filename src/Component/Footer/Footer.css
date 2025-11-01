@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap");
+
+.custom-footer {
+  background: #111
+    url("https://t4.ftcdn.net/jpg/03/30/75/01/360_F_330750109_h8lQXLZpJyXtC2fw8cdcLuVqiPU7EJZl.jpg")
+    center/cover no-repeat;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  padding-bottom: 3rem;
+  overflow: hidden;
+  padding-top: 3rem;
+}
+
+.custom-footer::before {
+   content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* Adjust height of blur effect */
+  background: linear-gradient(to bottom, rgb(0, 0, 0), rgba(0, 0, 0, 0));
+  -webkit-backdrop-filter: blur(3px); /* Optional blur for extra smooth effect */
+  backdrop-filter: blur(1px); /* Optional blur for extra smooth effect */
+  z-index: 2; /* Above overlay, below content */
+  pointer-events: none;
+}
+
+.footer-title,
+.footer-social,
+.footer-bottom,
+.yellow-circle,
+.circle-text {
+  position: relative;
+  z-index: 1; /* make content appear above overlay */
+}
+
+.footer-title {
+  font-size: 4vw;
+  margin: 2rem 0;
+  letter-spacing: 0.05em;
+  font-family: "Climate Crisis", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "YEAR" 1979;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 1.5rem auto;
+  font-family: "Saira Stencil One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.6rem;
+}
+
+.footer-social.bottom {
+  margin-top: 3rem;
+}
+
+.yellow-circle {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  width: 170px;
+  height: 170px;
+  background: radial-gradient(circle, #ff1500 70%, #ff1e00 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+  box-shadow: 0 0 15px #ff5703ce;
+}
+
+.circle-arrow {
+  font-size: 2rem;
+  color: #222;
+  z-index: 3;
+}
+
+@keyframes rotate-text {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.footer-bottom {
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 1rem;
+}
+
+.footer-bottom a,
+.footer-social a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-bottom a:hover,
+.footer-social a:hover {
+  color: #ffd600;
+}
+
+/* Layout container for center elements */
+.center-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+}
+
+/* Make social links wrap and add spacing */
+.footer-social {
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.footer-social a {
+  padding: 0.5rem 0.75rem;
+}
+
+/* Allow bottom section to wrap on narrow screens */
+.footer-bottom {
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+
+/* Default sizes for circular text within footer */
+.custom-footer .circular-text {
+  width: 300px;
+  height: 300px;
+}
+
+/* Mobile (≤640px) */
+@media (max-width: 640px) {
+  .custom-footer {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .footer-title {
+    font-size: 10vw; /* Larger for small screens */
+  }
+
+  .footer-social {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .center-container {
+    min-height: 260px;
+  }
+
+  .custom-footer .circular-text {
+    width: 200px;
+    height: 200px;
+  }
+
+  .yellow-circle {
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    box-shadow: 0 0 12px #ff5703ce;
+  }
+
+  .footer-bottom {
+    position: static; /* Avoid overlap */
+    margin-top: 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet (641px–1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .footer-title {
+    font-size: 6vw;
+  }
+
+  .footer-social {
+    font-size: 1.2rem;
+  }
+
+  .center-container {
+    min-height: 320px;
+  }
+
+  .custom-footer .circular-text {
+    width: 280px;
+    height: 280px;
+  }
+
+  .yellow-circle {
+    width: 140px;
+    height: 140px;
+    top: 51%;
+  }
+
+  .footer-bottom {
+    position: absolute;
+    font-size: 0.95rem;
+  }
+}
+
+/* Large Desktop (≥1280px) */
+@media (min-width: 1280px) {
+  .custom-footer .circular-text {
+    width: 360px;
+    height: 360px;
+  }
+
+  .yellow-circle {
+    width: 180px;
+    height: 180px;
+  }
+}

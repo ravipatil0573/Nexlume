@@ -1,0 +1,363 @@
+/* ============================================
+   PROJECTS SECTION STYLES
+   ============================================ */
+
+.projects-section {
+  min-height: 100vh;
+  background: #000000;
+  padding: 5rem 1rem;
+}
+
+.projects-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Main Heading */
+.main-heading {
+  font-size: 3.75rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5rem;
+  color: white;
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #ec4899, #8b5cf6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Project Card */
+.project-card {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto 5rem;
+   outline: none;
+  border: none;
+}
+
+.project-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  border-radius: 1.2rem;
+  margin: 20px;
+}
+
+/* Image Section */
+.project-image-section {
+  width: 100%;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+  border:10px solid #232222;
+  outline: 1px solid #ababab;
+ border-top: 1px solid linear-gradient(to top, #232222,#a1a1a1, #232222);
+}
+
+.gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Floating Description Tag */
+.floating-description {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 20;
+}
+
+.description-text {
+  color: #374151;
+  font-size: 0.875rem;
+  flex: 1;
+  margin: 0;
+}
+
+.arrow-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, #ec4899, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+}
+
+/* Image Wrapper with Rotation */
+.image-wrapper {
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  transform: rotate(0deg) scale(1);
+  transform-origin: center center;
+  margin-top: 3rem;
+  border: 4px solid rgba(48, 48, 48, 0.929);
+  border-radius: 1.2rem;
+}
+
+.image-wrapper.hovered {
+  transform: rotate(-5deg) scale(1.05);
+}
+
+/* View Details Indicator */
+.view-indicator {
+  position: absolute;
+  top: -3.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.5s ease-out;
+  opacity: 0;
+  transform: translateY(10px) translateX(-50%);
+}
+
+.view-indicator.show {
+  opacity: 1;
+  transform: translateY(0) translateX(-50%);
+}
+
+.view-circle-container {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+}
+
+.rotating-circle {
+  position: absolute;
+  inset: 0;
+  width: 6rem;
+  height: 6rem;
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.view-circle-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-circle-bg {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eye-icon {
+  width: 2rem;
+  height: 2rem;
+  color: white;
+  stroke-width: 2;
+}
+
+.view-text {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+/* Project Image Frame */
+.project-image-frame {
+  background-color: #000000;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+.project-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-width: 450px;
+  display: block;
+}
+
+/* Project Details */
+.project-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.dot-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #ec4899;
+  border-radius: 50%;
+}
+
+.project-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.project-subtitle {
+  color: #d1d5db;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* Project Features List */
+.project-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #d1d5db;
+}
+
+.feature-icon {
+  color: #ec4899;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Tech Tags */
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1rem;
+}
+
+.tech-tag {
+  padding: 0.5rem 1rem;
+  background-color: rgba(31, 41, 55, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.tech-tag:hover {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+.tech-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Responsive Design */
+@media (min-width: 1024px) {
+  .project-container {
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .project-image-section {
+    width: 50%;
+  }
+
+  .project-details {
+    width: 50%;
+  }
+
+  .main-heading {
+    font-size: 4rem;
+  }
+
+  .project-title {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 2.5rem;
+  }
+
+  .project-title {
+    font-size: 2rem;
+  }
+
+  .floating-description {
+    left: 1rem;
+    right: 1rem;
+    padding: 0.75rem;
+  }
+
+  .description-text {
+    font-size: 0.75rem;
+  }
+
+  .project-image-section {
+    min-height: 400px;
+    padding: 1.5rem;
+  }
+}
+

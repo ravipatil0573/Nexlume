@@ -1,0 +1,97 @@
+/* Custom Navbar Styling */
+
+/* Navbar background */
+.navbar {
+  transition: all 0.3s ease;
+  padding: 1rem 0;
+  background-color: #000 !important;
+}
+
+/* Scrolled navbar effect */
+.navbar-scrolled {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Logo styling */
+.navbar-brand {
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo image styling */
+.logo-img {
+  height: 25px;
+  margin: 0 2rem;
+}
+
+.logo-img-mobile {
+  height: 22px;
+  margin: 10px;
+}
+
+/* Nav links styling */
+.nav-link {
+  color: white !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.nav-link:hover {
+  color: #0d6efd !important; /* Blue hover color */
+}
+
+/* Remove border from toggler */
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+/* Desktop Navigation */
+.desktop-nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.desktop-nav .nav-link {
+  padding: 0 1.5rem !important;
+}
+
+/* Mobile menu styling */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding: 1rem 0;
+  }
+  
+  .nav-item {
+    text-align: center;
+    padding: 0.25rem 0;
+  }
+  
+  /* Add more space between mobile menu items */
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0 !important;
+    font-size: 1.1rem;
+  }
+}
+
+/* Desktop menu styling */
+@media (min-width: 992px) {
+  /* Ensure the navbar items are properly spaced */
+  .nav-link {
+    margin: 0 0.75rem;
+  }
+  
+  /* Center the logo */
+  .navbar-brand.position-absolute {
+    z-index: 1030;
+  }
+}
