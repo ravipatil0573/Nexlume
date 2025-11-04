@@ -80,7 +80,6 @@ const demo = [
 const TeamCard = ({
   items = demo,
   className = "",
-  radius = 300,
   damping = 0.45,
   fadeOut = 0.6,
   ease = "power3.out",

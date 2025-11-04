@@ -1,78 +1,558 @@
-.custom-bg {
-  background: #000000;
-}
+/* === Glassmorphism Layer Enhancement (non-destructive) === */
 
-.custom-heading {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
+.contact-form-container {
+  background: rgba(17, 17, 17, 0.6); /* keep your original #111 but transparent */
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
   position: relative;
-  display: inline-block;
-  padding-left: 30px;
-  letter-spacing: 2px;
-  color: #ff0101;
 }
 
-.left-line {
+.contact-form-container:hover {
+  border-color: rgba(0, 170, 255, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 170, 255, 0.15);
+}
+
+/* Optional glowing edge for futuristic look */
+.contact-form-container::before {
+  content: "";
   position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 2px;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 170, 255, 0.4), rgba(255, 255, 255, 0.05));
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.contact-section {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #000;
+  color: white;
+}
+
+/* Floating Bubbles */
+.bubble-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  opacity: 0;
+  animation: bubble 15s ease-in-out infinite;
+}
+
+@keyframes bubble {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20vw) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Layout */
+.contact-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Left */
+.contact-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 45%;
+}
+
+.contact-title {
+  font-size: 6rem;
+  font-weight: 800;
+  line-height: 1.2;
+  max-width: 480px;
+}
+
+/* Form */
+.contact-form-container {
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.contact-heading {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.contact-info {
+  color: #aaa;
+}
+
+.contact-email {
+  color: #00aaff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contact-socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.social-link img {
   width: 20px;
-  background-color: #ff4e00;
+  height: 20px;
+  filter: invert(1);
 }
 
-.left-side-text h2 {
-  font-weight: 700;
-  font-size: 2rem;
-  margin-bottom: 1rem;
+hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 1.5rem 0;
 }
 
-.left-side-text p {
-  font-size: 1.1rem;
-  color: #d1d1d1;
+/* Form Layout */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.book-now-button {
-  background-color: #ff1f1f;
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  color: white;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #00aaff;
+  outline: none;
+}
+
+/* Phone Number Input */
+.phone-input {
+  display: flex;
+  align-items: center;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+}
+
+.country-code {
+  padding: 0 10px;
+  color: #00aaff;
+  font-weight: 500;
+  border-right: 1px solid #333;
+  white-space: nowrap;
+}
+
+.phone-input input {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Services Checkbox */
+.project-options {
+  margin-top: 1rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.submit-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  background: #00aaff;
   color: white;
   border: none;
-  padding: 10px 25px;
+  padding: 12px;
   border-radius: 6px;
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 }
 
-.book-now-button:hover {
-  background-color: #e64500;
+.submit-btn:hover {
+  background: #0088cc;
 }
 
-.card {
-  background: rgb(246, 246, 246);
-  border-radius: 15px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
 
-.message{
-  color: #cfcfcf;
+/* Large Laptop/Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .contact-grid {
+    max-width: 1400px;
+  }
   
+  .contact-title {
+    font-size: 7rem;
+  }
 }
 
-@media (max-width: 767px) {
-  .left-side-text {
+/* Standard Laptop (1024px - 1439px) */
+@media (max-width: 1439px) and (min-width: 1024px) {
+  .contact-title {
+    font-size: 5rem;
+  }
+  
+  .contact-grid {
+    gap: 1.5rem;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .contact-content {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 600px;
+  }
+  
+  .contact-left {
+    padding-bottom: 0;
+    padding: 2rem 0;
+  }
+  
+  .contact-title {
+    font-size: 4rem;
     text-align: center;
+    max-width: 100%;
   }
-  .left-side-text h2 {
-    font-size: 1.75rem;
+  
+  .contact-form-container {
+    padding: 1.5rem;
   }
-  .button-container {
-    justify-content: center;
+  
+  .options-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
-  .card {
-    margin-bottom: 2rem;
-    max-width: 100% !important;
+}
+
+/* Mobile Large (426px - 767px) */
+@media (max-width: 767px) and (min-width: 426px) {
+  .contact-content {
+    padding: 2rem 1rem;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .contact-left {
+    padding-bottom: 0;
+    padding: 1.5rem 0;
+  }
+  
+  .contact-title {
+    font-size: 3rem;
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .contact-form-container {
+    padding: 1.5rem;
+  }
+  
+  .contact-heading {
+    font-size: 1.4rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .options-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile Medium (376px - 425px) */
+@media (max-width: 425px) and (min-width: 376px) {
+  .contact-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .contact-left {
+    padding-bottom: 0;
+    padding: 1rem 0;
+  }
+  
+  .contact-title {
+    font-size: 2.5rem;
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .contact-form-container {
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+  
+  .contact-heading {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 12px 10px;
+    font-size: 1rem;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .submit-btn {
+    padding: 14px;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile Small (321px - 375px) */
+@media (max-width: 375px) and (min-width: 321px) {
+  .contact-content {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  
+  .contact-left {
+    padding-bottom: 0;
+    padding: 1rem 0;
+  }
+  
+  .contact-title {
+    font-size: 2.25rem;
+    text-align: center;
+    max-width: 100%;
+    line-height: 1.1;
+  }
+  
+  .contact-form-container {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .contact-heading {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-info {
+    font-size: 0.9rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+  }
+  
+  .country-code {
+    padding: 0 8px;
+    font-size: 0.9rem;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .option-item {
+    font-size: 0.9rem;
+  }
+  
+  .submit-btn {
+    padding: 14px;
+    font-size: 1rem;
+  }
+  
+  hr {
+    margin: 1rem 0;
+  }
+}
+
+/* Mobile Extra Small (320px and below) */
+@media (max-width: 320px) {
+  .contact-content {
+    padding: 1.25rem 0.5rem;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .contact-left {
+    padding-bottom: 0;
+    padding: 0.75rem 0;
+  }
+  
+  .contact-title {
+    font-size: 2rem;
+    text-align: center;
+    max-width: 100%;
+    line-height: 1.1;
+  }
+  
+  .contact-form-container {
+    padding: 0.875rem;
+    border-radius: 8px;
+  }
+  
+  .contact-heading {
+    font-size: 1.1rem;
+    margin-bottom: 0.875rem;
+  }
+  
+  .contact-info {
+    font-size: 0.85rem;
+  }
+  
+  .contact-email {
+    font-size: 0.85rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 11px 8px;
+    font-size: 0.9rem;
+  }
+  
+  .country-code {
+    padding: 0 6px;
+    font-size: 0.85rem;
+  }
+  
+  .phone-input input {
+    padding: 8px;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+  
+  .option-item {
+    font-size: 0.85rem;
+  }
+  
+  .submit-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    margin-top: 1.25rem;
+  }
+  
+  .social-link img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  hr {
+    margin: 0.875rem 0;
   }
 }
