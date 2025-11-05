@@ -1,41 +1,134 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Services.css";
-import FAQ from "../../assets/service/faq.png"; // replace with your FAQ image path
+import FAQ from "../../assets/service/faq.png";
+import webDev from "../../assets/service/webdev.png";
+import webDesign from "../../assets/service/webdes.png";
+import android from "../../assets/service/android.png";
+import logo from "../../assets/service/logo.png";
+import { gsap } from "gsap";
+import "./FlowingMenu.css"; // Make sure this file exists
 
+// ================= FlowingMenu Component =================
+function FlowingMenu({ items = [] }) {
+  return (
+    <div className="menu-wrap">
+      <nav className="menu">
+        {items.map((item, idx) => (
+          <MenuItem key={idx} {...item} />
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+function MenuItem({ link, text, image }) {
+  const itemRef = React.useRef(null);
+  const marqueeRef = React.useRef(null);
+  const marqueeInnerRef = React.useRef(null);
+
+  const animationDefaults = { duration: 0.6, ease: "expo" };
+
+  const distMetric = (x, y, x2, y2) => {
+    const xDiff = x - x2;
+    const yDiff = y - y2;
+    return xDiff * xDiff + yDiff * yDiff;
+  };
+
+  const findClosestEdge = (mouseX, mouseY, width, height) => {
+    const topEdgeDist = distMetric(mouseX, mouseY, width / 2, 0);
+    const bottomEdgeDist = distMetric(mouseX, mouseY, width / 2, height);
+    return topEdgeDist < bottomEdgeDist ? "top" : "bottom";
+  };
+
+  const handleMouseEnter = (ev) => {
+    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current)
+      return;
+    const rect = itemRef.current.getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const y = ev.clientY - rect.top;
+    const edge = findClosestEdge(x, y, rect.width, rect.height);
+
+    gsap
+      .timeline({ defaults: animationDefaults })
+      .set(marqueeRef.current, { y: edge === "top" ? "-101%" : "101%" }, 0)
+      .set(marqueeInnerRef.current, { y: edge === "top" ? "101%" : "-101%" }, 0)
+      .to([marqueeRef.current, marqueeInnerRef.current], { y: "0%" }, 0);
+  };
+
+  const handleMouseLeave = (ev) => {
+    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current)
+      return;
+    const rect = itemRef.current.getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const y = ev.clientY - rect.top;
+    const edge = findClosestEdge(x, y, rect.width, rect.height);
+
+    gsap
+      .timeline({ defaults: animationDefaults })
+      .to(marqueeRef.current, { y: edge === "top" ? "-101%" : "101%" }, 0)
+      .to(marqueeInnerRef.current, { y: edge === "top" ? "101%" : "-101%" }, 0);
+  };
+
+  const repeatedMarqueeContent = Array.from({ length: 4 }).map((_, idx) => (
+    <React.Fragment key={idx}>
+      <span>{text}</span>
+      <div
+        className="marquee__img"
+        style={{ backgroundImage: `url(${image})` }}
+      />
+    </React.Fragment>
+  ));
+
+  return (
+    <div className="menu__item" ref={itemRef}>
+      <a
+        className="menu__item-link"
+        href={link}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {text}
+      </a>
+      <div className="marquee" ref={marqueeRef}>
+        <div className="marquee__inner-wrap" ref={marqueeInnerRef}>
+          <div className="marquee__inner" aria-hidden="true">
+            {repeatedMarqueeContent}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ================= Main Services Page =================
 const Services = () => {
-  // Services data
-  const services = [
+  const [openFaq, setOpenFaq] = useState(null);
+  const toggleFaq = (id) => setOpenFaq(openFaq === id ? null : id);
+
+  // Demo items for FlowingMenu (replace images or links as needed)
+  const demoItems = [
     {
-      id: 1,
-      number: "001",
-      title: "Website Development",
-      description:
-        "Bespoke websites designed to fit your business with modern features.",
+      link: "#",
+      text: "Website Development",
+      image: webDev,
     },
     {
-      id: 2,
-      number: "002",
-      title: "Web Design",
-      description:
-        "Custom website designs that reflect your brand with a modern touch.",
+      link: "#",
+      text: "Web Design",
+      image: webDesign,
     },
     {
-      id: 3,
-      number: "003",
-      title: "Android Development",
-      description:
-        "Develop intuitive, high-performance Android apps to boost your mobile presence.",
+      link: "#",
+      text: "Android Development",
+      image: android,
     },
     {
-      id: 4,
-      number: "004",
-      title: "Logo Design",
-      description:
-        "Crafting impactful logos that embody your brand's identity and vision.",
+      link: "#",
+      text: "Logo Design",
+      image: logo,
     },
   ];
 
-  // FAQs data
   const faqs = [
     {
       id: 1,
@@ -63,73 +156,9 @@ const Services = () => {
     },
   ];
 
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const toggleFaq = (id) => {
-    setOpenFaq(openFaq === id ? null : id);
-  };
-
-  // Animate Why Choose Us cards
-const whyCards = document.querySelectorAll(".why-card");
-const observerWhy = new IntersectionObserver(
-  (entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.3 }
-);
-whyCards.forEach((card) => observerWhy.observe(card));
-
-  useEffect(() => {
-    // Animate service items
-    const items = document.querySelectorAll(".service-item");
-    const observerItems = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Array.from(items).indexOf(entry.target);
-            entry.target.classList.add(
-              index % 2 === 0
-                ? "animate-left-to-right"
-                : "animate-right-to-left"
-            );
-            entry.target.style.opacity = "1";
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    items.forEach((item) => observerItems.observe(item));
-
-    // Animate FAQ image
-    const imgElement = document.querySelector(".img-to-animate");
-    if (imgElement) {
-      const observerImg = new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.style.animation =
-                "img-anim-left 1.3s forwards cubic-bezier(0.645, 0.045, 0.355, 1)";
-              entry.target.style.opacity = "1";
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
-      observerImg.observe(imgElement);
-    }
-  }, []);
-
   return (
     <>
-      {/* Header Section */}
+      {/* Header */}
       <div className="full-screen-container">
         <div className="header">
           <h1>Discover Our Expertise</h1>
@@ -145,48 +174,28 @@ whyCards.forEach((card) => observerWhy.observe(card));
         </div>
       </div>
 
-      {/* Services Section */}
+      {/* Flowing Services Menu */}
       <section className="main-container">
         <h2 className="header">What We Offer</h2>
-        {services.map((service) => (
-          <div key={service.id} className="service-item">
-            <div className="row d-flex align-items-center">
-              <div className="col-lg-6">
-                <div className="row d-flex align-items-center">
-                  <div className="col-md-4">
-                    <span className="numb">{service.number}</span>
-                  </div>
-                  <div className="col-md-8">
-                    <p>{service.description}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-6">
-                <h2>{service.title}</h2>
-              </div>
-            </div>
-          </div>
-        ))}
+        <div style={{ height: "600px", position: "relative" }}>
+          <FlowingMenu items={demoItems} />
+        </div>
       </section>
 
       {/* FAQ Section */}
       <section className="faqs-pg section-padding">
         <div className="container">
           <div className="row lg-marg align-items-center">
-            {/* Left Image */}
             <div className="col-lg-5">
               <div className="fit-img img-to-animate">
                 <img src={FAQ} alt="FAQs" />
               </div>
             </div>
-
-            {/* Right FAQ */}
             <div className="col-lg-7">
               <div className="sec-head mb-60">
                 <h6 className="sub-head mb-15">Questions & Answers</h6>
                 <h2>Providing clarity on frequently asked questions</h2>
               </div>
-
               <div className="faq-list">
                 {faqs.map((faq) => (
                   <div key={faq.id} className="faq-item">
@@ -214,40 +223,38 @@ whyCards.forEach((card) => observerWhy.observe(card));
         </div>
       </section>
 
- {/* Why Choose Us Section */}
-<section className="why-choose-us section-padding">
-  <div className="container">
-    <div className="sec-head mb-60 text-center">
-      <h6 className="sub-head mb-15">Why Choose Nexlume?</h6>
-      <h2>Your Vision, Our Commitment to Excellence</h2>
-    </div>
+      {/* Why Choose Us Section */}
+      <section className="why-choose-us section-padding">
+        <div className="container">
+          <div className="sec-head mb-60 text-center">
+            <h6 className="sub-head mb-15">Why Choose Nexlume?</h6>
+            <h2>Your Vision, Our Commitment to Excellence</h2>
+          </div>
 
-    <div className="why-grid">
-      <div className="why-card">
-        <div className="why-icon">🚀</div>
-        <h3>Fast Delivery</h3>
-        <p>Projects delivered quickly without compromising on quality.</p>
-      </div>
-      <div className="why-card">
-        <div className="why-icon">🎯</div>
-        <h3>Tailored Solutions</h3>
-        <p>Every service is customized to your business objectives.</p>
-      </div>
-      <div className="why-card">
-        <div className="why-icon">🛠️</div>
-        <h3>Full Support</h3>
-        <p>We provide ongoing maintenance and post-launch support.</p>
-      </div>
-      <div className="why-card">
-        <div className="why-icon">✨</div>
-        <h3>Modern Design</h3>
-        <p>Clean, user-friendly interfaces that drive engagement.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
+          <div className="why-grid">
+            <div className="why-card">
+              <div className="why-icon">🚀</div>
+              <h3>Fast Delivery</h3>
+              <p>Projects delivered quickly without compromising on quality.</p>
+            </div>
+            <div className="why-card">
+              <div className="why-icon">🎯</div>
+              <h3>Tailored Solutions</h3>
+              <p>Every service is customized to your business objectives.</p>
+            </div>
+            <div className="why-card">
+              <div className="why-icon">🛠️</div>
+              <h3>Full Support</h3>
+              <p>We provide ongoing maintenance and post-launch support.</p>
+            </div>
+            <div className="why-card">
+              <div className="why-icon">✨</div>
+              <h3>Modern Design</h3>
+              <p>Clean, user-friendly interfaces that drive engagement.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

@@ -1,0 +1,276 @@
+.menu-wrap {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.menu__item {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 -1px #fff;
+}
+
+.menu__item-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 600;
+  color: #fff;
+  font-size: 4vh;
+  padding: 0 1rem;
+}
+
+.menu__item-link:hover {
+  color: #060010;
+}
+
+.menu__item-link:focus:not(:focus-visible) {
+  color: #fff;
+}
+
+.marquee {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: #fff;
+  transform: translate3d(0, 101%, 0);
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.marquee__inner-wrap {
+  height: 100%;
+  width: 200%;
+  display: flex;
+  transform: translateX(0);
+}
+
+.marquee__inner {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 100%;
+  width: 200%;
+  will-change: transform;
+  animation: marquee 15s linear infinite;
+}
+
+.marquee span {
+  color: #060010;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 4vh;
+  line-height: 1.2;
+  padding: 1vh 1vw 0;
+}
+
+.marquee__img {
+  width: 80px;
+  height: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  margin: 0 8px;
+}
+
+.menu__item-link:hover + .marquee {
+  transform: translate3d(0, 0%, 0);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile devices - 320px */
+@media screen and (max-width: 320px) {
+  .menu__item-link {
+    font-size: 3.5vh;
+    padding: 0 0.5rem;
+  }
+  
+  .marquee span {
+    font-size: 3vh;
+    padding: 0.5vh 1vw 0;
+  }
+  
+  .marquee__img {
+    width: 120px;
+    height: 5vh;
+    margin: 1em 1vw;
+    padding: 0.5em 0;
+  }
+  
+  .marquee__inner {
+    animation: marquee 20s linear infinite;
+  }
+}
+
+/* Mobile devices - 375px */
+@media screen and (min-width: 321px) and (max-width: 375px) {
+  .menu__item-link {
+    font-size: 3.8vh;
+    padding: 0 0.75rem;
+  }
+  
+  .marquee span {
+    font-size: 3.2vh;
+    padding: 0.75vh 1vw 0;
+  }
+  
+  .marquee__img {
+    width: 140px;
+    height: 6vh;
+    margin: 1.5em 1.5vw;
+    padding: 0.75em 0;
+  }
+  
+  .marquee__inner {
+    animation: marquee 18s linear infinite;
+  }
+}
+
+/* Mobile devices - 425px */
+@media screen and (min-width: 376px) and (max-width: 425px) {
+  .menu__item-link {
+    font-size: 4vh;
+    padding: 0 1rem;
+  }
+  
+  .marquee span {
+    font-size: 3.5vh;
+    padding: 0.75vh 1vw 0;
+  }
+  
+  .marquee__img {
+    width: 160px;
+    height: 6.5vh;
+    margin: 1.5em 1.5vw;
+    padding: 0.75em 0;
+  }
+}
+
+/* Tablet devices - 768px */
+@media screen and (min-width: 426px) and (max-width: 768px) {
+  .menu__item-link {
+    font-size: 4.5vh;
+    padding: 0 1.5rem;
+  }
+  
+  .marquee span {
+    font-size: 4vh;
+    padding: 1vh 1.5vw 0;
+  }
+  
+  .marquee__img {
+    width: 180px;
+    height: 7vh;
+    margin: 1.75em 1.75vw;
+    padding: 0.875em 0;
+  }
+}
+
+/* Tablet landscape and small laptops - 1024px */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .menu__item-link {
+    font-size: 4.5vh;
+    padding: 0 2rem;
+  }
+  
+  .marquee span {
+    font-size: 4vh;
+    padding: 1vh 1.5vw 0;
+  }
+  
+  .marquee__img {
+    width: 200px;
+    height: 7vh;
+    margin: 2em 2vw;
+    padding: 1em 0;
+  }
+}
+
+/* Laptops - 1440px */
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+  .menu__item-link {
+    font-size: 4.5vh;
+  }
+  
+  .marquee span {
+    font-size: 4.2vh;
+  }
+  
+  .marquee__img {
+    width: 220px;
+    height: 7.5vh;
+  }
+}
+
+/* Large screens - 1920px and above */
+@media screen and (min-width: 1441px) {
+  .menu__item-link {
+    font-size: 5vh;
+  }
+  
+  .marquee span {
+    font-size: 4.5vh;
+  }
+  
+  .marquee__img {
+    width: 240px;
+    height: 8vh;
+  }
+}
+
+/* Touch devices - Enable marquee on tap/click instead of hover */
+@media (hover: none) and (pointer: coarse) {
+  .menu__item-link:active + .marquee,
+  .menu__item-link:focus + .marquee {
+    transform: translate3d(0, 0%, 0);
+  }
+  
+  .menu__item-link:hover + .marquee {
+    transform: translate3d(0, 101%, 0);
+  }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .menu__item-link {
+    font-size: 5vh;
+  }
+  
+  .marquee span {
+    font-size: 4.5vh;
+  }
+  
+  .marquee__img {
+    height: 8vh;
+    margin: 1em 1.5vw;
+  }
+}

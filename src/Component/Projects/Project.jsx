@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, memo } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { Link } from "react-router-dom";
 import "./Project.css";
 import OrbitingSkillsBanner from "./OrbitingSkillsBanner";
@@ -138,7 +138,7 @@ const projects = [
 
 const ProjectCard = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
-const [activeId, setActiveId] = useState(null);
+const [setActiveId] = useState(null);
   const refs = useRef([]);
 
   useEffect(() => {
