@@ -85,14 +85,20 @@
 }
 
 .marquee__img {
-  width: 80px;
-  height: 50px;
-  background-size: cover;
-  background-position: center;
+  width: auto;
+  height: auto;
+  max-width: 220px; /* limit so it doesn’t overflow */
+  max-height: 80px;
+  margin: 2em 2vw;
+  padding: 1em 0;
+  border-radius: 50px;
+  background-size: contain;
   background-repeat: no-repeat;
-  border-radius: 8px;
-  margin: 0 8px;
+  background-position: center;
+  image-rendering: -webkit-optimize-contrast; /* makes images sharper on webkit browsers */
+  image-rendering: crisp-edges; /* makes raster images sharper */
 }
+
 
 .menu__item-link:hover + .marquee {
   transform: translate3d(0, 0%, 0);
