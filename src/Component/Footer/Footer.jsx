@@ -1,64 +1,53 @@
-import React from "react";
-import CircularText from "./CircularText";
-import "./Footer.css";
+import React from 'react';
+import './Footer.css';
+import logoImage from '../../assets/logo.png';
+import { Link } from 'react-router-dom';
 
-const socialLinks = [
-  { text: "TELEGRAM", url: "https://t.me/IggaDark" },
-  { text: "GitHub", url: "viber://chat?number=+380674347527" },
-  {
-    text: "WHATSAPP",
-    url: "https://api.whatsapp.com/send?phone=+380674347527",
-  },
-  {
-    text: "LINKEDIN",
-    url: "https://www.linkedin.com/in/igor-okunskyi-🇺🇦-08a5691a5/",
-  },
-  { text: "INSTAGRAM", url: "https://www.instagram.com/okunskyi_uiux/" },
-];
-
-export default function Footer() {
+const Footer = () => {
   return (
-    <footer className="custom-footer">
-      <div className="footer-title">SAY HELLO</div>
-
-      {/* Top social links */}
-      <div className="footer-social top">
-        {socialLinks.slice(0, 3).map((link, i) => (
-          <a key={i} href={link.url} target="_blank" rel="noopener noreferrer">
-            {link.text}
-          </a>
-        ))}
-      </div>
-
-      {/* Center circular button */}
-      <div className="center-container">
-        <CircularText
-          text="REACT*BITS*COMPONENTS*"
-          onHover="speedUp"
-          spinDuration={20}
-          className="custom-class"
-        ></CircularText>
-
-        <div className="yellow-circle">
-          <span className="circle-arrow">&#8599;</span>
+    <footer className="footer py-5">
+      <div className="container">
+        <div className="row align-items-center mb-4">
+          <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <Link to="/" className="footer-logo-link">
+              <img src={logoImage} alt="Nexlume" className="footer-logo" />
+            </Link>
+          </div>
+          <div className="col-md-6 text-center text-md-end">
+            <div className="social-links-container">
+              <div className="follow-us mb-4 ">Follow Us</div>
+              <div className="social-links">
+                <Link to="/" className="social-link">
+                  <i className="bi bi-facebook"></i>
+                </Link>
+                <Link to="/" className="social-link">
+                  <i className="bi bi-twitter-x"></i>
+                </Link>
+                <Link to="/" className="social-link">
+                  <i className="bi bi-instagram"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Bottom social links */}
-      <div className="footer-social bottom">
-        {socialLinks.slice(3).map((link, i) => (
-          <a key={i} href={link.url} target="_blank" rel="noopener noreferrer">
-            {link.text}
-          </a>
-        ))}
-      </div>
-
-      {/* Footer bottom */}
-      <div className="footer-bottom">
-        <a href="mailto:NexLume.Co@GMAIL.COM">NEXLUME.CO@GMAIL.COM</a>
-        <span>© 2024</span>
-        <a href="/privacy-policy">PRIVACY POLICY</a>
+        
+        <hr className="footer-divider" />
+        
+        <div className="row align-items-center">
+          <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <div className="contact-email">
+            
+              <Link to="/">nexlume.co@gmail.com</Link>
+            </div>
+          </div>
+          <div className="col-md-6 text-center text-md-end">
+            <span className="copyright">Nexlume &copy; 2025 All Rights Reserved</span>
+          </div>
+        </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;
+
