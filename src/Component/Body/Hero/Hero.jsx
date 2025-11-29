@@ -1,114 +1,147 @@
-// src/components/Hero.jsx
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import Spotlight from "../../../../components/ui/Spotlight";
-import SplineSceneBasic from "../../../../components/ui/SplineSceneBasic";
+import React, { useEffect, useRef, useMemo } from "react";
+import { ArrowRight, Mail } from "lucide-react";
+import profileImage from "../../../assets/Team/aman.jpg";
+import "./Hero.css";
 
 export default function Hero() {
-  const splineUrl =
-    "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
+  const starsRef = useRef(null);
 
-  // 🪄 Headings + Paragraphs
-  const content = [
-    {
-      title: "Where design meets innovation",
-      text: "Power your brand with a sleek, dark aesthetic and vibrant digital storytelling.",
-    },
-    {
-      title: "Build experiences that feel alive",
-      text: "Deliver seamless interactions and bold visuals that leave a lasting impression.",
-    },
-    {
-      title: "Crafting digital brilliance",
-      text: "Turning ideas into elegant, high-performance digital experiences with Nexlume.",
-    },
-    {
-      title: "Nexlume brings your vision to life",
-      text: "Design, build, and launch stunning digital experiences — faster than ever before.",
-    },
-  ];
+  // Memoize star count for performance
+  const starCount = useMemo(() => 80, []);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // ⏳ Rotate every 3 seconds
+  // Generate stars for the background with improved performance
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % content.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [content.length]);
+    const starsContainer = starsRef.current;
+    if (!starsContainer) return;
 
-  const current = content[currentIndex];
+    // Clear existing stars
+    starsContainer.innerHTML = "";
+
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+
+    // Generate minimal stars for cinematic atmosphere
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.animationDelay = `${Math.random() * 3}s`;
+      star.setAttribute("aria-hidden", "true");
+      fragment.appendChild(star);
+    }
+
+    starsContainer.appendChild(fragment);
+  }, [starCount]);
+
+  // Smooth scroll handler for anchor links
+  const handleConnectClick = (e) => {
+    const href = e.currentTarget.getAttribute("href");
+    if (href && href.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }
+  };
 
   return (
-    <section className="position-relative  min-vh-100 d-flex align-items-center bg-black text-white overflow-hidden">
-      {/* Spotlight Background */}
-      <div className="position-absolute top-0 start-0 w-100 h-100">
-        <Spotlight />
-      </div>
-
-      <div className="container position-relative">
-        <div className="row g-4 align-items-center">
-          {/* Left Content */}
-          <div className="col-12 col-lg-6 mt-5 mt-md-5 mt-lg-0">
-            <div className="mb-4">
-              <AnimatePresence mode="wait">
-    <motion.div
-      key={current.title} // unique key per slide
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.6 }}
+    <section
+      className="hero-section position-relative min-vh-100 d-flex align-items-center justify-content-center overflow-hidden"
+      aria-label="Hero section"
     >
-      {/* Heading */}
-      <h1 className="text-4xl md:text-6xl font-extrabold leading-tight h-[80px] flex items-center justify-center md:justify-start">
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff0000] via-[#ff6a00] to-[#ff1100] inline-block">
-          {current.title}
-        </span>
-      </h1>
+      {/* Starry Background */}
+      <div
+        ref={starsRef}
+        className="stars-container position-absolute top-0 start-0 w-100 h-100"
+        aria-hidden="true"
+      />
 
-      {/* Paragraph */}
-      <p className="mt-5 text-white/70 text-base md:text-lg text-center md:text-left">
-        {current.text}
-      </p>
-    </motion.div>
-  </AnimatePresence>
+      {/* Glowing Horizon Line */}
+      <div className="horizon-line" aria-hidden="true" />
+
+      {/* Content Container */}
+      <div className="container position-relative z-2">
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-10 col-xl-8 text-center">
+            {/* Coming Soon Banner */}
+            <div className="coming-soon-banner mb-4 mb-md-5">
+              <div className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill">
+                <span
+                  className="coming-soon-badge"
+                  aria-label="Coming soon badge"
+                >
+                  Coming Soon
+                </span>
+                <span className="banner-text">Nextnode is launching soon!</span>
+                <ArrowRight
+                  size={16}
+                  className="banner-arrow"
+                  aria-hidden="true"
+                />
+              </div>
             </div>
 
-            {/* Buttons */}
-            <div className="d-flex flex-wrap gap-3">
-              <motion.a
-                href="#get-started"
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: "0 0 24px rgba(255, 5, 5, 0.7)",
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="btn btn-primary btn-lg fw-semibold rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 btn-glow"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgb(255, 30, 0) 0%, hsl(25, 100%, 50%) 100%)",
-                  border: "none",
-                }}
-              >
-                <ArrowRight size={20} />
-                Get started
-              </motion.a>
+            {/* Main Heading */}
+            <h1 className="hero-heading mb-4 mb-md-5">
+              I help founders turn ideas
+              <br />
+              into seamless <em>digital experiences</em>
+            </h1>
 
+            {/* Personal Introduction */}
+            <div className="intro-section mb-4 mb-md-5">
+              <p className="intro-text mb-3">
+                Hello, I'm <span className="name-highlight">Aayush Bharti</span>
+              </p>
+              <div className="profile-container d-inline-flex align-items-center gap-3 mb-3">
+                <div className="profile-image-wrapper">
+                  <img
+                    src={profileImage}
+                    alt="Aayush Bharti - Full Stack Developer"
+                    className="profile-image"
+                    loading="eager"
+                    width="80"
+                    height="80"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://ui-avatars.com/api/?name=Aayush+Bharti&size=80&background=6B46C1&color=fff&bold=true";
+                    }}
+                  />
+                </div>
+                <span className="role-text">a Full Stack Developer</span>
+              </div>
+            </div>
+
+            {/* Call to Action */}
+            <div className="cta-section d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 gap-md-4">
+              {/* Let's Connect Button */}
               <a
-                className="btn btn-outline-light btn-lg fw-semibold rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2"
-                href="#learn-more"
+                href="#contact"
+                onClick={handleConnectClick}
+                className="connect-btn d-inline-flex align-items-center gap-2 px-4 py-3 rounded-pill text-decoration-none"
+                aria-label="Navigate to contact section"
               >
-                Learn more
+                <span>Let's Connect</span>
+                <div className="arrow-circle" aria-hidden="true">
+                  <ArrowRight size={18} />
+                </div>
               </a>
-            </div>
-          </div>
 
-          {/* Right: 3D */}
-          <div className="col-12 col-lg-6">
-            <div className="position-relative">
-              <SplineSceneBasic sceneUrl={splineUrl} />
+              {/* Email */}
+              <a
+                href="mailto:hello@aayushbharti.in"
+                className="email-link d-inline-flex align-items-center gap-2 text-decoration-none"
+                aria-label="Send email to hello@aayushbharti.in"
+              >
+                <Mail size={20} className="email-icon" aria-hidden="true" />
+                <span>hello@aayushbharti.in</span>
+              </a>
             </div>
           </div>
         </div>

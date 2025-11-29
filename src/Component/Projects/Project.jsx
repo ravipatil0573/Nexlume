@@ -88,9 +88,13 @@ const ProjectCard = ({ project }) => {
           >
             {/* Project image */}
             <div className="project-image-frame">
-             <Link to={`/projects/${project.id}`} state={project}>
-  <img src={project.image} alt={project.title} className="project-image" />
-</Link>
+              <Link to={`/projects/${project.id}`} state={project}>
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="project-image"
+                />
+              </Link>
             </div>
           </div>
         </div>

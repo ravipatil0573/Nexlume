@@ -1,28 +1,14 @@
-import React, {
-  useMemo,
-  useRef,
-  useEffect,
-  useCallback,
-  useState,
-  Fragment,
-} from "react";
+import React, { useMemo, useEffect, useState, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { gsap } from "gsap";
-import "./MagicBento.css";
 
 // -------------------------------------------
 // Config
 // -------------------------------------------
-const DEFAULT_PARTICLE_COUNT = 12;
-const DEFAULT_SPOTLIGHT_RADIUS = 300;
-const DEFAULT_GLOW_COLOR = "132, 0, 255";
-const MOBILE_BREAKPOINT = 768;
 const API_BASE = import.meta.env?.VITE_API_BASE || "http://localhost:5000";
 
 // -------------------------------------------
 // Utilities
 // -------------------------------------------
-const ensureArray = (val) => (Array.isArray(val) ? val : val ? [val] : []);
 const extractColorFromGradient = (g) => {
   if (!g) return "#060010";
   const m = g.match(/#([0-9a-f]{6})/i);
@@ -31,7 +17,6 @@ const extractColorFromGradient = (g) => {
 
 const loadGoogleFontIfNeeded = (family) => {
   if (!family) return;
-  // basic sanitization for a Google Fonts URL
   const encoded = family.replace(/\s+/g, "+");
   const id = `gf-${encoded}`;
   if (document.getElementById(id)) return;
@@ -54,7 +39,6 @@ const normalizeProject = (src = {}) => {
     ? [src.image]
     : [];
   const color = src.color || extractColorFromGradient(src.gradient);
-  const glowColor = src.glowColor || DEFAULT_GLOW_COLOR;
 
   const typography = {
     headings: src.typography?.headings || "Poppins",
@@ -62,9 +46,6 @@ const normalizeProject = (src = {}) => {
     align: src.typography?.align || "left",
     google: "google" in (src.typography || {}) ? !!src.typography.google : true,
   };
-
-  // If backend provides ordered "cards", use them; else we’ll synthesize later
-  const cards = Array.isArray(src.cards) ? src.cards : null;
 
   return {
     id: src.id ?? "unknown",
@@ -74,620 +55,65 @@ const normalizeProject = (src = {}) => {
     techStack,
     features,
     screenshots,
-    palette: src.palette?.length ? src.palette : ["#060010", "#8400FF", "#00F0FF", "#FFFFFF"],
+    palette: src.palette?.length
+      ? src.palette
+      : ["#060010", "#8400FF", "#00F0FF", "#FFFFFF"],
     typography,
     links: src.links || { demo: src.demo, repo: src.repo },
     role: src.role || "Developer",
     timeline: src.timeline || "",
     color,
     gradient: src.gradient,
-    glowColor,
-    cards, // may be null (we’ll auto-build)
   };
 };
-
-// -------------------------------------------
-// Visual FX helpers (particles/spotlight)
-// -------------------------------------------
-const createParticleElement = (x, y, color = DEFAULT_GLOW_COLOR) => {
-  const el = document.createElement("div");
-  el.className = "particle";
-  el.style.cssText = `
-    position: absolute;
-    width: 4px; height: 4px; border-radius: 50%;
-    background: rgba(${color}, 1);
-    box-shadow: 0 0 6px rgba(${color}, 0.6);
-    pointer-events: none; z-index: 100;
-    left: ${x}px; top: ${y}px;
-  `;
-  return el;
-};
-const calculateSpotlightValues = (radius) => ({
-  proximity: radius * 0.5,
-  fadeDistance: radius * 0.75,
-});
-const updateCardGlowProperties = (card, mouseX, mouseY, glow, radius) => {
-  const rect = card.getBoundingClientRect();
-  const x = ((mouseX - rect.left) / rect.width) * 100;
-  const y = ((mouseY - rect.top) / rect.height) * 100;
-  card.style.setProperty("--glow-x", `${x}%`);
-  card.style.setProperty("--glow-y", `${y}%`);
-  card.style.setProperty("--glow-intensity", glow.toString());
-  card.style.setProperty("--glow-radius", `${radius}px`);
-};
-
-// -------------------------------------------
-// Particle-enabled Card Shell
-// -------------------------------------------
-const ParticleCard = ({
-  children,
-  className = "",
-  disableAnimations = false,
-  style,
-  particleCount = DEFAULT_PARTICLE_COUNT,
-  glowColor = DEFAULT_GLOW_COLOR,
-  enableTilt = true,
-  clickEffect = false,
-  enableMagnetism = false,
-}) => {
-  const cardRef = useRef(null);
-  const particlesRef = useRef([]);
-  const timeoutsRef = useRef([]);
-  const isHoveredRef = useRef(false);
-  const memoizedParticles = useRef([]);
-  const particlesInitialized = useRef(false);
-  const magnetismAnimationRef = useRef(null);
-
-  const initializeParticles = useCallback(() => {
-    if (particlesInitialized.current || !cardRef.current) return;
-    const { width, height } = cardRef.current.getBoundingClientRect();
-    memoizedParticles.current = Array.from({ length: particleCount }, () =>
-      createParticleElement(Math.random() * width, Math.random() * height, glowColor)
-    );
-    particlesInitialized.current = true;
-  }, [particleCount, glowColor]);
-
-  const clearAllParticles = useCallback(() => {
-    timeoutsRef.current.forEach(clearTimeout);
-    timeoutsRef.current = [];
-    if (magnetismAnimationRef.current?.kill) magnetismAnimationRef.current.kill();
-    particlesRef.current.forEach((p) =>
-      gsap.to(p, {
-        scale: 0,
-        opacity: 0,
-        duration: 0.3,
-        ease: "back.in(1.7)",
-        onComplete: () => p.parentNode?.removeChild(p),
-      })
-    );
-    particlesRef.current = [];
-  }, []);
-
-  const animateParticles = useCallback(() => {
-    if (!cardRef.current || !isHoveredRef.current) return;
-    if (!particlesInitialized.current) initializeParticles();
-    memoizedParticles.current.forEach((particle, index) => {
-      const t = setTimeout(() => {
-        if (!isHoveredRef.current || !cardRef.current) return;
-        const clone = particle.cloneNode(true);
-        cardRef.current.appendChild(clone);
-        particlesRef.current.push(clone);
-        gsap.fromTo(clone, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" });
-        gsap.to(clone, {
-          x: (Math.random() - 0.5) * 100,
-          y: (Math.random() - 0.5) * 100,
-          rotation: Math.random() * 360,
-          duration: 2 + Math.random() * 2,
-          ease: "none",
-          repeat: -1,
-          yoyo: true,
-        });
-        gsap.to(clone, { opacity: 0.3, duration: 1.5, ease: "power2.inOut", repeat: -1, yoyo: true });
-      }, index * 100);
-      timeoutsRef.current.push(t);
-    });
-  }, [initializeParticles]);
-
-  useEffect(() => {
-    if (disableAnimations || !cardRef.current) return;
-    const el = cardRef.current;
-
-    const onEnter = () => {
-      isHoveredRef.current = true;
-      animateParticles();
-      if (enableTilt) gsap.to(el, { rotateX: 5, rotateY: 5, duration: 0.3, ease: "power2.out", transformPerspective: 1000 });
-    };
-    const onLeave = () => {
-      isHoveredRef.current = false;
-      clearAllParticles();
-      if (enableTilt) gsap.to(el, { rotateX: 0, rotateY: 0, duration: 0.3, ease: "power2.out" });
-      if (enableMagnetism) gsap.to(el, { x: 0, y: 0, duration: 0.3, ease: "power2.out" });
-    };
-    const onMove = (e) => {
-      if (!enableTilt && !enableMagnetism) return;
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      const cx = r.width / 2;
-      const cy = r.height / 2;
-      if (enableTilt) {
-        const rx = ((y - cy) / cy) * -10;
-        const ry = ((x - cx) / cx) * 10;
-        gsap.to(el, { rotateX: rx, rotateY: ry, duration: 0.1, ease: "power2.out", transformPerspective: 1000 });
-      }
-      if (enableMagnetism) {
-        gsap.to(el, { x: (x - cx) * 0.05, y: (y - cy) * 0.05, duration: 0.3, ease: "power2.out" });
-      }
-    };
-    const onClick = (e) => {
-      if (!clickEffect) return;
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      const maxD = Math.max(
-        Math.hypot(x, y),
-        Math.hypot(x - r.width, y),
-        Math.hypot(x, y - r.height),
-        Math.hypot(x - r.width, y - r.height)
-      );
-      const ripple = document.createElement("div");
-      ripple.style.cssText = `
-        position:absolute;width:${maxD * 2}px;height:${maxD * 2}px;border-radius:50%;
-        background: radial-gradient(circle, rgba(${glowColor}, .4) 0%, rgba(${glowColor}, .2) 30%, transparent 70%);
-        left:${x - maxD}px; top:${y - maxD}px; pointer-events:none; z-index:1000;`;
-      el.appendChild(ripple);
-      gsap.fromTo(ripple, { scale: 0, opacity: 1 }, { scale: 1, opacity: 0, duration: 0.8, ease: "power2.out", onComplete: () => ripple.remove() });
-    };
-
-    el.addEventListener("mouseenter", onEnter);
-    el.addEventListener("mouseleave", onLeave);
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("click", onClick);
-
-    return () => {
-      isHoveredRef.current = false;
-      el.removeEventListener("mouseenter", onEnter);
-      el.removeEventListener("mouseleave", onLeave);
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("click", onClick);
-      clearAllParticles();
-    };
-  }, [animateParticles, clearAllParticles, disableAnimations, enableTilt, enableMagnetism, clickEffect, glowColor]);
-
-  return (
-    <div ref={cardRef} className={`${className} particle-container`} style={{ ...style, position: "relative", overflow: "hidden" }}>
-      {children}
-    </div>
-  );
-};
-
-// -------------------------------------------
-// Spotlight
-// -------------------------------------------
-const GlobalSpotlight = ({
-  gridRef,
-  disableAnimations = false,
-  enabled = true,
-  spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
-  glowColor = DEFAULT_GLOW_COLOR,
-}) => {
-  const spotlightRef = useRef(null);
-
-  useEffect(() => {
-    if (disableAnimations || !gridRef?.current || !enabled) return;
-
-    const sp = document.createElement("div");
-    sp.className = "global-spotlight";
-    sp.style.cssText = `
-      position: fixed; width: 800px; height: 800px; border-radius: 50%; pointer-events: none;
-      background: radial-gradient(circle,
-        rgba(${glowColor}, 0.15) 0%, rgba(${glowColor}, 0.08) 15%, rgba(${glowColor}, 0.04) 25%, rgba(${glowColor}, 0.02) 40%, rgba(${glowColor}, 0.01) 65%, transparent 70%);
-      z-index: 200; opacity: 0; transform: translate(-50%, -50%); mix-blend-mode: screen;`;
-    document.body.appendChild(sp);
-    spotlightRef.current = sp;
-
-    const handleMove = (e) => {
-      if (!spotlightRef.current || !gridRef.current) return;
-      const section = gridRef.current.closest(".bento-section");
-      const rect = section?.getBoundingClientRect();
-      const inside =
-        rect &&
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
-
-      const cards = gridRef.current.querySelectorAll(".magic-bento-card");
-      if (!inside) {
-        gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" });
-        cards.forEach((c) => c.style.setProperty("--glow-intensity", "0"));
-        return;
-      }
-
-      const { proximity, fadeDistance } = calculateSpotlightValues(spotlightRadius);
-      let minDist = Infinity;
-
-      cards.forEach((card) => {
-        const r = card.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const d =
-          Math.hypot(e.clientX - cx, e.clientY - cy) -
-          Math.max(r.width, r.height) / 2;
-        const eff = Math.max(0, d);
-        minDist = Math.min(minDist, eff);
-
-        let glow = 0;
-        if (eff <= proximity) glow = 1;
-        else if (eff <= fadeDistance)
-          glow = (fadeDistance - eff) / (fadeDistance - proximity);
-        updateCardGlowProperties(card, e.clientX, e.clientY, glow, spotlightRadius);
-      });
-
-      gsap.to(spotlightRef.current, { left: e.clientX, top: e.clientY, duration: 0.1, ease: "power2.out" });
-      const opacity =
-        minDist <= proximity ? 0.8 :
-        minDist <= fadeDistance ? ((fadeDistance - minDist) / (fadeDistance - proximity)) * 0.8 : 0;
-      gsap.to(spotlightRef.current, { opacity, duration: opacity > 0 ? 0.2 : 0.5, ease: "power2.out" });
-    };
-
-    const handleLeave = () => {
-      gridRef.current?.querySelectorAll(".magic-bento-card").forEach((c) => c.style.setProperty("--glow-intensity", "0"));
-      if (spotlightRef.current) gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3, ease: "power2.out" });
-    };
-
-    document.addEventListener("mousemove", handleMove);
-    document.addEventListener("mouseleave", handleLeave);
-    return () => {
-      document.removeEventListener("mousemove", handleMove);
-      document.removeEventListener("mouseleave", handleLeave);
-      spotlightRef.current?.parentNode?.removeChild(spotlightRef.current);
-    };
-  }, [gridRef, disableAnimations, enabled, spotlightRadius, glowColor]);
-
-  return null;
-};
-
-// -------------------------------------------
-// Layout helpers + grid
-// -------------------------------------------
-const BentoCardGrid = ({ children, gridRef }) => (
-  <div className="card-grid bento-section" ref={gridRef}>
-    {children}
-  </div>
-);
-
-const useMobileDetection = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return isMobile;
-};
-
-const MagicBentoProject = ({
-  cards = [],
-  textAutoHide = true,
-  enableStars = true,
-  enableSpotlight = true,
-  enableBorderGlow = true,
-  disableAnimations = false,
-  spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
-  particleCount = DEFAULT_PARTICLE_COUNT,
-  enableTilt = true,
-  glowColor = DEFAULT_GLOW_COLOR,
-  clickEffect = true,
-  enableMagnetism = true,
-}) => {
-  const gridRef = useRef(null);
-  const isMobile = useMobileDetection();
-  const shouldDisable = disableAnimations || isMobile;
-
-  const CardShell = enableStars ? ParticleCard : Fragment;
-  const shellProps = enableStars
-    ? { disableAnimations: shouldDisable, particleCount, glowColor, enableTilt, clickEffect, enableMagnetism }
-    : {};
-
-  return (
-    <>
-      {enableSpotlight && (
-        <GlobalSpotlight
-          gridRef={gridRef}
-          disableAnimations={shouldDisable}
-          enabled={enableSpotlight}
-          spotlightRadius={spotlightRadius}
-          glowColor={glowColor}
-        />
-      )}
-
-      <BentoCardGrid gridRef={gridRef}>
-        {cards.map((card, i) => {
-          const base = `magic-bento-card ${textAutoHide ? "magic-bento-card--text-autohide" : ""} ${enableBorderGlow ? "magic-bento-card--border-glow" : ""}`;
-          const bg = card.background || card.color || "#060010";
-          const common = { className: base, style: { backgroundColor: bg, "--glow-color": glowColor } };
-          return (
-            <CardShell key={i} {...shellProps} {...common}>
-              <div className="magic-bento-card__header">
-                {card.label && <div className="magic-bento-card__label">{card.label}</div>}
-              </div>
-              <div className="magic-bento-card__content">
-                {card.title && <h2 className="magic-bento-card__title">{card.title}</h2>}
-                {card.description && <p className="magic-bento-card__description">{card.description}</p>}
-                {card.slot}
-              </div>
-            </CardShell>
-          );
-        })}
-      </BentoCardGrid>
-    </>
-  );
-};
-
-// -------------------------------------------
-// Render helpers for backend “cards”
-// -------------------------------------------
-const renderBackendCards = (project) => {
-  if (!project.cards) return null;
-
-  const toCard = (c) => {
-    const color = c.color || project.color || "#060010";
-
-    // different card types coming from backend:
-    if (c.type === "overview") {
-      return {
-        label: c.label || "Overview",
-        title: c.title || project.name,
-        description: c.description || project.overview,
-        color,
-        slot: (
-          <div className="space-y-3">
-            {project.role && <div className="pill">Role: {project.role}</div>}
-            {project.timeline && <div className="pill">Timeline: {project.timeline}</div>}
-          </div>
-        ),
-      };
-    }
-
-    if (c.type === "tech") {
-      const items = ensureArray(c.items).length ? c.items : project.techStack;
-      return {
-        label: c.label || "Tech Stack",
-        title: c.title || "Technologies",
-        description: c.description || "Core tools and frameworks",
-        color,
-        slot: (
-          <ul className="list-grid">
-            {items.map((t) => (
-              <li key={t} className="tag">{t}</li>
-            ))}
-          </ul>
-        ),
-      };
-    }
-
-    if (c.type === "list") {
-      const items = ensureArray(c.items).length ? c.items : project.features;
-      return {
-        label: c.label || "Features",
-        title: c.title || "What it does",
-        description: c.description || "Highlights",
-        color,
-        slot: (
-          <ul className="list-bullets">
-            {items.map((f) => (
-              <li key={f}>{f}</li>
-            ))}
-          </ul>
-        ),
-      };
-    }
-
-    if (c.type === "gallery") {
-      const images = ensureArray(c.images).length ? c.images : project.screenshots;
-      return {
-        label: c.label || "Gallery",
-        title: c.title || "Screenshots",
-        description: c.description || "Project photos",
-        color,
-        slot: (
-          <div className="gallery">
-            {images.map((src, i) => (
-              <img key={`${src}-${i}`} src={src} alt={`screenshot-${i}`} />
-            ))}
-          </div>
-        ),
-      };
-    }
-
-    if (c.type === "links") {
-      const links = c.links?.length
-        ? c.links
-        : [
-            project.links?.demo && { text: "Live Demo", href: project.links.demo },
-            project.links?.repo && { text: "GitHub Repo", href: project.links.repo },
-          ].filter(Boolean);
-
-      return {
-        label: c.label || "Links",
-        title: c.title || "Demo & Code",
-        description: c.description || "Explore more",
-        color,
-        slot: (
-          <div className="links">
-            {links.map((l, idx) => (
-              <a key={idx} className="btn" href={l.href} target="_blank" rel="noreferrer">
-                {l.text}
-              </a>
-            ))}
-          </div>
-        ),
-      };
-    }
-
-    if (c.type === "metrics") {
-      const metrics = ensureArray(c.metrics);
-      return {
-        label: c.label || "Metrics",
-        title: c.title || "Results",
-        description: c.description || "",
-        color,
-        slot: (
-          <div className="metrics-grid">
-            {metrics.map((m, idx) => (
-              <div key={idx} className="metric">
-                <div className="metric-value">{m.value}</div>
-                <div className="metric-label">{m.label}</div>
-              </div>
-            ))}
-          </div>
-        ),
-      };
-    }
-
-    if (c.type === "richtext") {
-      // render trusted HTML from backend (only if you control the content)
-      return {
-        label: c.label || "Details",
-        title: c.title || "",
-        description: c.description || "",
-        color,
-        slot: (
-          <div
-            className="richtext"
-            dangerouslySetInnerHTML={{ __html: c.html || "" }}
-          />
-        ),
-      };
-    }
-
-    // default pass-through
-    return {
-      label: c.label,
-      title: c.title,
-      description: c.description,
-      color,
-    };
-  };
-
-  return project.cards.map(toCard);
-};
-
-// Fallback when backend doesn’t send `cards`
-const synthesizeCards = (project) => [
-  {
-    label: "Overview",
-    title: project.name,
-    description: project.overview,
-    color: project.color || "#060010",
-    slot: (
-      <div className="space-y-3">
-        {project.role && <div className="pill">Role: {project.role}</div>}
-        {project.timeline && <div className="pill">Timeline: {project.timeline}</div>}
-      </div>
-    ),
-  },
-  {
-    label: "Tech Stack",
-    title: "Technologies",
-    description: "Core tools and frameworks",
-    color: project.color || "#060010",
-    slot: (
-      <ul className="list-grid">
-        {project.techStack?.map((t) => (
-          <li key={t} className="tag">{t}</li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    label: "Features",
-    title: "What it does",
-    description: "Highlights",
-    color: project.color || "#060010",
-    slot: (
-      <ul className="list-bullets">
-        {project.features?.map((f) => (
-          <li key={f}>{f}</li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    label: "Gallery",
-    title: "Screenshots",
-    description: "Project photos",
-    color: project.color || "#060010",
-    slot: (
-      <div className="gallery">
-        {project.screenshots?.map((src, i) => (
-          <img key={`${src}-${i}`} src={src} alt={`screenshot-${i}`} />
-        ))}
-      </div>
-    ),
-  },
-  {
-    label: "Design",
-    title: "Colors",
-    description: "Palette",
-    color: project.color || "#060010",
-    slot: (
-      <div className="palette">
-        {project.palette?.map((c) => (
-          <div key={c} className="swatch" style={{ background: c }} />
-        ))}
-      </div>
-    ),
-  },
-  {
-    label: "Typography",
-    title: project.typography?.headings || "Typography",
-    description: `Body: ${project.typography?.body || ""}`,
-    color: project.color || "#060010",
-    slot: (
-      <div className="typo">
-        <div>Headings: {project.typography?.headings}</div>
-        <div>Body: {project.typography?.body}</div>
-        <div>Align: {project.typography?.align}</div>
-      </div>
-    ),
-  },
-  {
-    label: "Links",
-    title: "Demo & Code",
-    description: "Explore more",
-    color: project.color || "#060010",
-    slot: (
-      <div className="links">
-        {project.links?.demo && (
-          <a className="btn" href={project.links.demo} target="_blank" rel="noreferrer">Live Demo</a>
-        )}
-        {project.links?.repo && (
-          <a className="btn" href={project.links.repo} target="_blank" rel="noreferrer">GitHub Repo</a>
-        )}
-      </div>
-    ),
-  },
-];
 
 // -------------------------------------------
 // Page Component
 // -------------------------------------------
 export default function ProjectDetails() {
-  const { projectId } = useParams(); // you can pass either numeric :id or string :slug
+  const { projectId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // If you navigated with state from list page, we use it for instant paint.
   const stateProject = location.state ? normalizeProject(location.state) : null;
-
   const [serverProject, setServerProject] = useState(null);
   const [loading, setLoading] = useState(!stateProject);
-  const [error, setError] = useState("");
 
-  // load fonts when we know families
+  // Refs for sections (must be declared before any early returns)
+  const overviewRef = useRef(null);
+  const featuresRef = useRef(null);
+  const techStackRef = useRef(null);
+  const challengesRef = useRef(null);
+  const outcomeRef = useRef(null);
+
+  // Active section state
+  const [activeSection, setActiveSection] = useState("overview");
+
+  // Navigation items
+  const navItems = [
+    { id: "overview", label: "Overview", ref: overviewRef },
+    { id: "features", label: "Key Features", ref: featuresRef },
+    { id: "tech-stack", label: "Tech Stack", ref: techStackRef },
+    {
+      id: "challenges",
+      label: "Challenges & Learnings",
+      ref: challengesRef,
+      subItems: [
+        { id: "adopting-tech", label: "Adopting the Tech Ecosystem" },
+        { id: "real-time", label: "Real-Time Syncing" },
+        { id: "authentication", label: "Authentication" },
+        { id: "design-composition", label: "Design & Component Composition" },
+      ],
+    },
+    { id: "outcome", label: "Outcome", ref: outcomeRef },
+  ];
+
+  const project = useMemo(
+    () => serverProject || stateProject,
+    [serverProject, stateProject]
+  );
+
+  // Load fonts when we know families
   useEffect(() => {
     const p = serverProject || stateProject;
     if (!p) return;
@@ -697,7 +123,7 @@ export default function ProjectDetails() {
     }
   }, [serverProject, stateProject]);
 
-  // Fetch from backend by id or slug (name)
+  // Fetch from backend by id or slug
   useEffect(() => {
     let isMounted = true;
 
@@ -714,10 +140,8 @@ export default function ProjectDetails() {
         const json = await res.json();
         if (!isMounted) return;
         setServerProject(normalizeProject(json));
-        setError("");
       } catch {
         if (!isMounted) return;
-        // setError("Unable to load project from server.");
         setServerProject(null);
       } finally {
         if (isMounted) setLoading(false);
@@ -730,92 +154,844 @@ export default function ProjectDetails() {
     };
   }, [projectId]);
 
-  const project = useMemo(() => serverProject || stateProject, [serverProject, stateProject]);
-  const cards = useMemo(() => {
-    if (!project) return [];
-    const built = renderBackendCards(project);
-    return built && built.length ? built : synthesizeCards(project);
+  // IntersectionObserver to track active section with improved threshold
+  useEffect(() => {
+    if (!project) return;
+
+    const observers = [];
+    const sectionRefs = [
+      { id: "overview", ref: overviewRef },
+      { id: "features", ref: featuresRef },
+      { id: "tech-stack", ref: techStackRef },
+      { id: "challenges", ref: challengesRef },
+      { id: "outcome", ref: outcomeRef },
+    ];
+
+    sectionRefs.forEach(({ id, ref }) => {
+      if (!ref.current) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+              setActiveSection(id);
+            }
+          });
+        },
+        {
+          rootMargin: "-100px 0px -50% 0px",
+          threshold: 0.45,
+        }
+      );
+
+      observer.observe(ref.current);
+      observers.push(observer);
+    });
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
   }, [project]);
 
-  if (!project && !loading) {
+  // Smooth scroll handler
+  const handleNavClick = (sectionId, ref) => {
+    if (ref?.current) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      setActiveSection(sectionId);
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="project-details-page" style={{ padding: 24 }}>
-        <h1>Project details</h1>
-        <p className="muted" style={{ opacity: 0.8 }}>
-          We couldn’t find this project. Go back to the list and choose a project.
-        </p>
-        <button className="btn" onClick={() => navigate(-1)}>← Back</button>
+      <div
+        className="min-vh-100 d-flex align-items-center justify-content-center"
+        style={{ backgroundColor: "#0A0A0A" }}
+      >
+        <div className="text-center">
+          <div className="spinner-border text-light mb-3" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="text-light-50">Loading project details...</p>
+        </div>
       </div>
     );
   }
 
+  if (!project) {
+    return (
+      <div
+        className="min-vh-100 d-flex align-items-center justify-content-center"
+        style={{ backgroundColor: "#0A0A0A" }}
+      >
+        <div className="text-center px-4">
+          <h1
+            className="text-white mb-3"
+            style={{ fontSize: "2rem", fontWeight: 600 }}
+          >
+            Project Not Found
+          </h1>
+          <p className="text-white-50 mb-4" style={{ opacity: 0.8 }}>
+            We couldn't find this project. Go back to the list and choose a
+            project.
+          </p>
+          <button
+            className="btn btn-outline-light px-4 py-2 rounded-pill"
+            onClick={() => navigate(-1)}
+            style={{
+              borderColor: "rgba(255, 255, 255, 0.2)",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.borderColor = "rgba(255, 255, 255, 0.5)";
+              e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+              e.target.style.backgroundColor = "transparent";
+            }}
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const mainImage = project?.screenshots?.[0] || project?.image || "";
+  const features = project?.features || [];
+  const techStack = project?.techStack || [];
+
   return (
     <div
-      className="project-details-page"
       style={{
-        // apply per-project fonts if present
-        fontFamily: project?.typography?.body ? `"${project.typography.body}", system-ui, sans-serif` : undefined,
-        textAlign: project?.typography?.align || "left",
+        backgroundColor: "#0A0A0A",
+        minHeight: "100vh",
+        color: "#EDEDED",
+        fontFamily: project?.typography?.body
+          ? `"${project.typography.body}", system-ui, sans-serif`
+          : "system-ui, sans-serif",
       }}
     >
-      <header className="project-header">
-        <h1 style={{ fontFamily: project?.typography?.headings ? `"${project.typography.headings}", system-ui, sans-serif` : undefined }}>
-          {project?.name || "Loading..."}
-        </h1>
-        <p className="muted">{project?.overview}</p>
-        {loading && <p className="muted">Loading details…</p>}
-        {!!error && !loading && (
-          <p className="muted" style={{ color: "salmon" }}>
-            {error}
-          </p>
-        )}
-      </header>
+      <div
+        className="container-fluid px-4 px-lg-5"
+        style={{ maxWidth: "1400px", margin: "0 auto" }}
+      >
+        <div className="d-flex justify-content-between gap-5 position-relative">
+          {/* Main Content */}
+          <main style={{ flex: "1", maxWidth: "900px", width: "100%" }}>
+            {/* Hero Section */}
+            <section className="pt-20 pb-12">
+              <div className="mb-6">
+                <h1
+                  className="mb-4"
+                  style={{
+                    fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
+                    fontWeight: 600,
+                    lineHeight: 1.2,
+                    color: "#EDEDED",
+                    fontFamily: project?.typography?.headings
+                      ? `"${project.typography.headings}", system-ui, sans-serif`
+                      : "system-ui, sans-serif",
+                  }}
+                >
+                  {project.name || "Untitled Project"}
+                </h1>
+                <p
+                  className="mb-5"
+                  style={{
+                    fontSize: "1.125rem",
+                    color: "#A7A7A7",
+                    lineHeight: 1.75,
+                    maxWidth: "800px",
+                  }}
+                >
+                  {project.overview ||
+                    "A modern project built with cutting-edge technologies."}
+                </p>
 
-      <MagicBentoProject
-        cards={cards}
-        textAutoHide
-        enableStars
-        enableSpotlight
-        enableBorderGlow
-        enableTilt
-        enableMagnetism
-        clickEffect
-        spotlightRadius={360}
-        particleCount={14}
-        glowColor={project?.glowColor || DEFAULT_GLOW_COLOR}
-      />
+                {/* Tech Stack Badges */}
+                {techStack.length > 0 && (
+                  <div className="d-flex flex-wrap gap-2 mb-4">
+                    {techStack.slice(0, 8).map((tech, idx) => (
+                      <span
+                        key={idx}
+                        className="badge px-3 py-2 rounded-pill"
+                        style={{
+                          backgroundColor: "rgba(255, 255, 255, 0.05)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          color: "#EDEDED",
+                          fontSize: "0.875rem",
+                          fontWeight: 400,
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Role & Timeline */}
+                {(project.role || project.timeline) && (
+                  <div className="d-flex flex-wrap gap-3">
+                    {project.role && (
+                      <span
+                        className="text-white-50"
+                        style={{ fontSize: "0.9rem" }}
+                      >
+                        <i className="bi bi-person me-2"></i>
+                        {project.role}
+                      </span>
+                    )}
+                    {project.timeline && (
+                      <span
+                        className="text-white-50"
+                        style={{ fontSize: "0.9rem" }}
+                      >
+                        <i className="bi bi-calendar me-2"></i>
+                        {project.timeline}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Banner Preview Image */}
+            {mainImage && (
+              <section className="mb-12">
+                <div
+                  className="rounded-4 overflow-hidden position-relative"
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.02)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    boxShadow:
+                      "0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.03)",
+                    backdropFilter: "blur(4px)",
+                    padding: "2px",
+                  }}
+                >
+                  <div
+                    className="rounded-4 overflow-hidden"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                    }}
+                  >
+                    <img
+                      src={mainImage}
+                      alt={project.name}
+                      className="w-100"
+                      style={{
+                        display: "block",
+                        height: "auto",
+                        maxHeight: "600px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Overview Section */}
+            <section
+              id="overview"
+              ref={overviewRef}
+              className="pt-20 pb-12"
+              style={{ scrollMarginTop: "120px" }}
+            >
+              <h2
+                className="mb-6"
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: 600,
+                  color: "#EDEDED",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                  paddingBottom: "12px",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Overview
+              </h2>
+              <p
+                style={{
+                  fontSize: "1.0625rem",
+                  lineHeight: 1.75,
+                  color: "#A7A7A7",
+                  maxWidth: "900px",
+                }}
+              >
+                {project.overview ||
+                  `${project.name} is a comprehensive project that showcases modern web development practices. 
+                  Built with attention to detail and user experience, it demonstrates proficiency in full-stack development 
+                  and contemporary design principles.`}
+              </p>
+            </section>
+
+            {/* Key Features */}
+            {features.length > 0 && (
+              <section
+                id="features"
+                ref={featuresRef}
+                className="pt-20 pb-12"
+                style={{ scrollMarginTop: "120px" }}
+              >
+                <h2
+                  className="mb-6"
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: 600,
+                    color: "#EDEDED",
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                    paddingBottom: "12px",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Key Features
+                </h2>
+                <div
+                  className="row g-4"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "24px",
+                  }}
+                >
+                  {features.slice(0, 6).map((feature, idx) => (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-3"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                        backdropFilter: "blur(4px)",
+                        boxShadow: "inset 0 0 30px rgba(255, 255, 255, 0.03)",
+                        transition: "all 0.3s ease",
+                        cursor: "pointer",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.1)";
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.15)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.08)";
+                      }}
+                    >
+                      <div className="d-flex align-items-start">
+                        <i
+                          className="bi bi-check-circle-fill me-3 mt-1"
+                          style={{
+                            color: "#00F0FF",
+                            fontSize: "1.25rem",
+                            flexShrink: 0,
+                          }}
+                        ></i>
+                        <p
+                          className="mb-0"
+                          style={{ color: "#EDEDED", lineHeight: 1.6 }}
+                        >
+                          {feature}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Tech Stack */}
+            {techStack.length > 0 && (
+              <section
+                id="tech-stack"
+                ref={techStackRef}
+                className="pt-20 pb-12"
+                style={{ scrollMarginTop: "120px" }}
+              >
+                <h2
+                  className="mb-6"
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: 600,
+                    color: "#EDEDED",
+                    borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                    paddingBottom: "12px",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Tech Stack
+                </h2>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                    gap: "24px",
+                  }}
+                >
+                  {techStack.map((tech, idx) => (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-3"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                        backdropFilter: "blur(4px)",
+                        boxShadow: "inset 0 0 30px rgba(255, 255, 255, 0.03)",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.1)";
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.15)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.08)";
+                      }}
+                    >
+                      <div className="d-flex align-items-center">
+                        <div
+                          className="rounded-circle me-3 d-flex align-items-center justify-content-center"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            backgroundColor: "rgba(255, 255, 255, 0.05)",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <i
+                            className="bi bi-code-slash"
+                            style={{ color: "#00F0FF" }}
+                          ></i>
+                        </div>
+                        <div>
+                          <h6
+                            className="mb-1"
+                            style={{
+                              color: "#EDEDED",
+                              fontWeight: 600,
+                              fontSize: "1rem",
+                            }}
+                          >
+                            {tech}
+                          </h6>
+                          <p
+                            className="mb-0 text-white-50"
+                            style={{ fontSize: "0.875rem" }}
+                          >
+                            Modern technology stack
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Challenges & Learnings */}
+            <section
+              id="challenges"
+              ref={challengesRef}
+              className="pt-20 pb-12"
+              style={{ scrollMarginTop: "120px" }}
+            >
+              <h2
+                className="mb-6"
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: 600,
+                  color: "#EDEDED",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                  paddingBottom: "12px",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Challenges & Learnings
+              </h2>
+              <div className="row g-4">
+                <div className="col-md-6">
+                  <div className="mb-6">
+                    <h3
+                      id="adopting-tech"
+                      className="mb-3"
+                      style={{
+                        fontSize: "1.125rem",
+                        fontWeight: 600,
+                        color: "#EDEDED",
+                        scrollMarginTop: "120px",
+                      }}
+                    >
+                      Adopting the Tech Ecosystem
+                    </h3>
+                    <p style={{ color: "#A7A7A7", lineHeight: 1.75 }}>
+                      Implementing modern web technologies required careful
+                      consideration of performance, scalability, and user
+                      experience. The project involved integrating multiple
+                      systems while maintaining clean code architecture.
+                    </p>
+                  </div>
+                  <div className="mb-6">
+                    <h3
+                      id="real-time"
+                      className="mb-3"
+                      style={{
+                        fontSize: "1.125rem",
+                        fontWeight: 600,
+                        color: "#EDEDED",
+                        scrollMarginTop: "120px",
+                      }}
+                    >
+                      Real-Time Syncing
+                    </h3>
+                    <p style={{ color: "#A7A7A7", lineHeight: 1.75 }}>
+                      Implementing real-time data synchronization required
+                      understanding WebSocket connections and state management
+                      patterns to ensure seamless user experience.
+                    </p>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="mb-6">
+                    <h3
+                      id="authentication"
+                      className="mb-3"
+                      style={{
+                        fontSize: "1.125rem",
+                        fontWeight: 600,
+                        color: "#EDEDED",
+                        scrollMarginTop: "120px",
+                      }}
+                    >
+                      Authentication
+                    </h3>
+                    <p style={{ color: "#A7A7A7", lineHeight: 1.75 }}>
+                      Building secure authentication flows required implementing
+                      OAuth protocols, session management, and protecting
+                      against common security vulnerabilities.
+                    </p>
+                  </div>
+                  <div className="mb-6">
+                    <h3
+                      id="design-composition"
+                      className="mb-3"
+                      style={{
+                        fontSize: "1.125rem",
+                        fontWeight: 600,
+                        color: "#EDEDED",
+                        scrollMarginTop: "120px",
+                      }}
+                    >
+                      Design & Component Composition
+                    </h3>
+                    <p style={{ color: "#A7A7A7", lineHeight: 1.75 }}>
+                      Creating an intuitive and visually appealing interface
+                      required balancing aesthetics with functionality. The
+                      design process emphasized user-centered principles and
+                      accessibility standards.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Outcome */}
+            <section
+              id="outcome"
+              ref={outcomeRef}
+              className="pt-20 pb-12"
+              style={{ scrollMarginTop: "120px" }}
+            >
+              <h2
+                className="mb-6"
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: 600,
+                  color: "#EDEDED",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                  paddingBottom: "12px",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Outcome
+              </h2>
+              <p
+                style={{
+                  fontSize: "1.0625rem",
+                  lineHeight: 1.75,
+                  color: "#A7A7A7",
+                  maxWidth: "900px",
+                }}
+              >
+                {project.name} was successfully developed and deployed,
+                demonstrating proficiency in modern web development practices.
+                The project showcases clean code architecture, responsive
+                design, and attention to detail in both functionality and user
+                experience.
+              </p>
+            </section>
+
+            {/* Action Buttons */}
+            {(project.links?.demo || project.links?.repo) && (
+              <section className="pt-20 pb-20">
+                <div className="d-flex flex-wrap gap-3">
+                  {project.links?.demo && (
+                    <a
+                      href={project.links.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn px-4 py-3 rounded-pill d-inline-flex align-items-center"
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#EDEDED",
+                        textDecoration: "none",
+                        fontWeight: 500,
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.4)";
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.boxShadow =
+                          "0 4px 20px rgba(255, 255, 255, 0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.2)";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      <i className="bi bi-box-arrow-up-right me-2"></i>
+                      Live Demo
+                    </a>
+                  )}
+                  {project.links?.repo && (
+                    <a
+                      href={project.links.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn px-4 py-3 rounded-pill d-inline-flex align-items-center"
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#EDEDED",
+                        textDecoration: "none",
+                        fontWeight: 500,
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.4)";
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.boxShadow =
+                          "0 4px 20px rgba(255, 255, 255, 0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(255, 255, 255, 0.2)";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      <i className="bi bi-github me-2"></i>
+                      Source Code
+                    </a>
+                  )}
+                </div>
+              </section>
+            )}
+          </main>
+
+          {/* Right Sidebar Navigation */}
+          <aside
+            className="d-none d-lg-flex flex-column"
+            style={{
+              position: "sticky",
+              top: "96px",
+              alignSelf: "flex-start",
+              width: "220px",
+              flexShrink: 0,
+              paddingLeft: "32px",
+              height: "fit-content",
+            }}
+          >
+            <p
+              className="mb-4"
+              style={{
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#8A8A8A",
+              }}
+            >
+              On this page
+            </p>
+
+            <nav
+              style={{
+                position: "relative",
+                paddingLeft: "16px",
+              }}
+            >
+              {/* Vertical connector line */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: "0",
+                  bottom: "0",
+                  width: "1px",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                }}
+              />
+
+              <div className="d-flex flex-column" style={{ gap: "12px" }}>
+                {navItems.map((item) => (
+                  <div key={item.id}>
+                    <button
+                      onClick={() => handleNavClick(item.id, item.ref)}
+                      className="btn p-0 text-start border-0 bg-transparent"
+                      style={{
+                        fontSize: "0.875rem",
+                        color:
+                          activeSection === item.id ? "#FFFFFF" : "#9CA3AF",
+                        fontWeight: activeSection === item.id ? 500 : 400,
+                        letterSpacing: "0.01em",
+                        lineHeight: "1.5",
+                        padding: "4px 0 4px 12px",
+                        position: "relative",
+                        transition: "all 0.3s ease",
+                        cursor: "pointer",
+                        textDecoration: "none",
+                        background: "transparent",
+                        opacity: activeSection === item.id ? 1 : 0.7,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (activeSection !== item.id) {
+                          e.currentTarget.style.color = "#D1D5DB";
+                          e.currentTarget.style.transform = "translateX(4px)";
+                          e.currentTarget.style.opacity = "1";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (activeSection !== item.id) {
+                          e.currentTarget.style.color = "#9CA3AF";
+                          e.currentTarget.style.transform = "translateX(0)";
+                          e.currentTarget.style.opacity = "0.7";
+                        }
+                      }}
+                    >
+                      {/* Active indicator - left border glow */}
+                      {activeSection === item.id && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left: "-16px",
+                            top: "0",
+                            bottom: "0",
+                            width: "2px",
+                            backgroundColor: "#FFFFFF",
+                            boxShadow:
+                              "0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px rgba(255, 255, 255, 0.3)",
+                            animation: "fadeIn 0.3s ease-in-out",
+                          }}
+                        />
+                      )}
+                      {item.label}
+                    </button>
+
+                    {/* Sub-items for Challenges section */}
+                    {item.subItems && activeSection === item.id && (
+                      <div
+                        className="d-flex flex-column"
+                        style={{
+                          marginTop: "8px",
+                          paddingLeft: "16px",
+                          gap: "8px",
+                        }}
+                      >
+                        {item.subItems.map((subItem) => (
+                          <a
+                            key={subItem.id}
+                            href={`#${subItem.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const element = document.getElementById(
+                                subItem.id
+                              );
+                              if (element) {
+                                element.scrollIntoView({
+                                  behavior: "smooth",
+                                  block: "start",
+                                });
+                              }
+                            }}
+                            style={{
+                              fontSize: "0.8125rem",
+                              color: "#9CA3AF",
+                              fontWeight: 400,
+                              letterSpacing: "0.01em",
+                              lineHeight: "1.5",
+                              padding: "2px 0",
+                              textDecoration: "none",
+                              transition: "all 0.3s ease",
+                              opacity: 0.7,
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = "#D1D5DB";
+                              e.currentTarget.style.transform =
+                                "translateX(4px)";
+                              e.currentTarget.style.opacity = "1";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = "#9CA3AF";
+                              e.currentTarget.style.transform = "translateX(0)";
+                              e.currentTarget.style.opacity = "0.7";
+                            }}
+                          >
+                            {subItem.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </nav>
+          </aside>
+        </div>
+      </div>
+
+      {/* Add animations */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: scaleY(0.8);
+            }
+            to {
+              opacity: 1;
+              transform: scaleY(1);
+            }
+          }
+        `}
+      </style>
     </div>
   );
-}
-
-// -------------------------------------------
-// Tiny helper CSS injection (works with MagicBento.css)
-// -------------------------------------------
-const extraCss = `
-.project-details-page{max-width:1200px;margin:0 auto;padding:24px}
-.project-header{margin-bottom:24px}
-.project-header h1{font-size:28px;line-height:1.2;margin:0 0 8px}
-.project-header .muted{opacity:.8}
-.pill{display:inline-block;padding:6px 10px;border:1px solid rgba(255,255,255,.08);border-radius:999px;font-size:12px;opacity:.9}
-.list-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
-.tag{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 10px}
-.list-bullets{padding-left:18px;display:grid;gap:6px}
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.gallery img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
-.palette{display:flex;gap:8px}
-.swatch{width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1)}
-.links{display:flex;gap:12px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.metric{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center}
-.metric-value{font-size:20px;font-weight:700}
-.metric-label{opacity:.8;font-size:12px}
-.richtext ul{padding-left:18px}
-.richtext li{margin:6px 0}
-`;
-if (typeof document !== "undefined" && !document.getElementById("project-details-inline-css")) {
-  const style = document.createElement("style");
-  style.id = "project-details-inline-css";
-  style.innerHTML = extraCss;
-  document.head.appendChild(style);
 }
