@@ -322,7 +322,6 @@
 
 /* Join Team Section */
 .join-team {
-    background-image: url('/static/images/team-email.jpg');
     background-size: cover;
     background-position: center;
     display: flex;

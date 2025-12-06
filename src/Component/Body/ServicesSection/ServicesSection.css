@@ -2,11 +2,12 @@
 
 /* Section Styles */
 .services-section {
-  background-color: #000;
+  background-color: var(--color-bg-primary);
   min-height: 100vh;
   padding: 80px 0;
   position: relative;
   overflow: hidden;
+  font-family: var(--font-primary);
 }
 
 .services-container {
@@ -16,11 +17,11 @@
 
 /* Header Styles */
 .services-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .services-subtitle {
-  color: #888;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
   letter-spacing: 2px;
   font-weight: 600;
@@ -29,26 +30,27 @@
 }
 
 .services-title {
-  color: #fff;
+  color: var(--color-text-primary);
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   margin-bottom: 0;
-  background: linear-gradient(135deg, #fd0000 0%, #ff7e7e 100%);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: var(--font-heading);
 }
 
 /* View All Button */
 .view-all-btn {
-  color: #fff;
+  color: var(--color-text-primary);
   font-size: 1rem;
   font-weight: 500;
   text-decoration: none;
   padding: 12px 28px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--color-border-medium);
   border-radius: 50px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
   display: inline-flex;
   align-items: center;
   background-color: transparent;
@@ -56,11 +58,11 @@
 
 .view-all-btn:hover,
 .view-all-btn.hovered {
-  background-color: #fff;
-  color: #000;
-  border-color: #fff;
+  background-color: var(--color-text-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-glow-white);
 }
 
 .view-all-btn i {
@@ -79,10 +81,10 @@
   background-color: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border-light);
   border-radius: 20px;
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
   height: 100%;
@@ -93,7 +95,7 @@
 .service-card.hovered {
   transform: translateY(-10px);
   background-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-2xl);
 }
 
 /* Icon Wrapper */
@@ -113,8 +115,8 @@
 
 .icon-wrapper i {
   font-size: 2rem;
-  color: #fff;
-  transition: transform 0.4s ease;
+  color: var(--color-text-primary);
+  transition: transform var(--transition-base);
 }
 
 /* Gradient backgrounds for each service card on hover */
@@ -155,19 +157,20 @@
 }
 
 .service-title {
-  color: #fff;
+  color: var(--color-text-primary);
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 12px;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
+  font-family: var(--font-heading);
 }
 
 .service-description {
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
 }
 
 /* Arrow Icon */
@@ -178,13 +181,13 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
+  color: var(--color-text-on-primary);
   font-size: 1rem;
-  transition: all 0.4s ease;
+  transition: all var(--transition-base);
   z-index: 3;
   opacity: 0;
   transform: translate(-10px, 10px);

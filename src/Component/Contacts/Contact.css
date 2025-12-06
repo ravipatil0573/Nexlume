@@ -1,18 +1,18 @@
 /* === Glassmorphism Layer Enhancement (non-destructive) === */
 
 .contact-form-container {
-  background: rgba(17, 17, 17, 0.6); /* keep your original #111 but transparent */
+  background: var(--color-bg-card);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-base);
   position: relative;
 }
 
 .contact-form-container:hover {
-  border-color: rgba(0, 170, 255, 0.3);
-  box-shadow: 0 12px 40px rgba(0, 170, 255, 0.15);
+  border-color: var(--color-border-medium);
+  box-shadow: var(--shadow-2xl);
 }
 
 /* Optional glowing edge for futuristic look */
@@ -36,8 +36,9 @@
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: #000;
-  color: white;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
 }
 
 /* Floating Bubbles */
@@ -113,14 +114,16 @@
   font-size: 1.6rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
 }
 
 .contact-info {
-  color: #aaa;
+  color: var(--color-text-muted);
 }
 
 .contact-email {
-  color: #00aaff;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
 }
@@ -141,7 +144,7 @@
 
 hr {
   border: none;
-  border-top: 1px solid #333;
+  border-top: 1px solid var(--color-border-primary);
   margin: 1.5rem 0;
 }
 
@@ -167,11 +170,11 @@ hr {
 .form-group input,
 .form-group textarea,
 .form-group select {
-  background: #222;
-  border: 1px solid #444;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-primary);
   border-radius: 6px;
   padding: 10px;
-  color: white;
+  color: var(--color-text-primary);
   font-size: 0.9rem;
   width: 100%;
   box-sizing: border-box;
@@ -180,7 +183,7 @@ hr {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: #00aaff;
+  border-color: var(--color-primary);
   outline: none;
 }
 
@@ -188,23 +191,23 @@ hr {
 .phone-input {
   display: flex;
   align-items: center;
-  background: #222;
-  border: 1px solid #444;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-primary);
   border-radius: 6px;
 }
 
 .country-code {
   padding: 0 10px;
-  color: #00aaff;
+  color: var(--color-primary);
   font-weight: 500;
-  border-right: 1px solid #333;
+  border-right: 1px solid var(--color-border-primary);
   white-space: nowrap;
 }
 
 .phone-input input {
   background: transparent;
   border: none;
-  color: white;
+  color: var(--color-text-primary);
   padding: 10px;
   flex: 1;
   min-width: 0;
@@ -230,18 +233,18 @@ hr {
 .submit-btn {
   margin-top: 1.5rem;
   width: 100%;
-  background: #00aaff;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
   border: none;
   padding: 12px;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background var(--transition-base);
 }
 
 .submit-btn:hover {
-  background: #0088cc;
+  background: var(--color-primary-600);
 }
 
 /* ============================================

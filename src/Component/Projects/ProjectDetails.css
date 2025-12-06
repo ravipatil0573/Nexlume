@@ -6,23 +6,23 @@
    CSS Variables & Design Tokens
    -------------------------------------------- */
 :root {
-  /* Color Palette */
+  /* Color Palette - Using App.css variables where applicable */
   --hue: 27;
   --sat: 69%;
-  --white: hsl(0, 0%, 100%);
-  --purple-primary: rgba(132, 0, 255, 1);
-  --purple-glow: rgba(132, 0, 255, 0.2);
-  --purple-border: rgba(132, 0, 255, 0.8);
-  --cyan-accent: #00f0ff;
-  --border-color: #392e4e;
-  --background-dark: #060010;
-  --background-base: #0a0a0a;
+  --white: var(--color-text-primary);
+  --purple-primary: var(--color-primary);
+  --purple-glow: rgba(255, 0, 0, 0.2);
+  --purple-border: rgba(255, 0, 0, 0.8);
+  --cyan-accent: var(--color-primary);
+  --border-color: var(--color-border-primary);
+  --background-dark: var(--color-bg-secondary);
+  --background-base: var(--color-bg-primary);
 
-  /* Text Colors */
-  --text-primary: #ededed;
-  --text-secondary: #a7a7a7;
-  --text-tertiary: #8a8a8a;
-  --text-muted: #9ca3af;
+  /* Text Colors - Using App.css variables */
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-tertiary);
+  --text-muted: var(--color-text-muted);
 
   /* Spacing Scale */
   --space-xs: 0.25rem;
@@ -79,10 +79,10 @@
   --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.25);
   --shadow-glow: 0 0 30px rgba(132, 0, 255, 0.3);
 
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Transitions - Using App.css variables */
+  --transition-fast: var(--transition-fast);
+  --transition-base: var(--transition-base);
+  --transition-slow: var(--transition-slow);
 
   /* Z-Index Scale */
   --z-base: 1;
@@ -97,8 +97,6 @@
 /* --------------------------------------------
    Typography Enhancements
    -------------------------------------------- */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap");
-
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -106,9 +104,7 @@
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-primary);
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;
@@ -121,8 +117,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", sans-serif;
+  font-family: var(--font-heading);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-tight);
@@ -210,7 +205,7 @@ p {
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-full);
   background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border-light);
   color: var(--text-primary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-normal);
@@ -221,7 +216,7 @@ p {
 
 .tech-badge:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-border-medium);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -265,7 +260,7 @@ p {
   padding: var(--space-xl);
   border-radius: var(--radius-xl);
   background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-light);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.03);
@@ -294,10 +289,9 @@ p {
 
 .feature-card:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-border-medium);
   transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 0 40px rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-xl);
 }
 
 .feature-card:hover::before {
@@ -305,7 +299,7 @@ p {
 }
 
 .feature-icon {
-  color: var(--cyan-accent);
+  color: var(--color-primary);
   font-size: var(--font-size-xl);
   flex-shrink: 0;
   margin-right: var(--space-md);
@@ -331,7 +325,7 @@ p {
   padding: var(--space-xl);
   border-radius: var(--radius-xl);
   background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-light);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.03);
@@ -359,9 +353,9 @@ p {
 
 .tech-card:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-border-medium);
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
+  box-shadow: var(--shadow-xl), var(--shadow-glow-red);
 }
 
 .tech-card:hover::after {
@@ -388,7 +382,7 @@ p {
 }
 
 .tech-icon {
-  color: var(--cyan-accent);
+  color: var(--color-primary);
   font-size: var(--font-size-lg);
 }
 
@@ -417,9 +411,8 @@ p {
   overflow: hidden;
   position: relative;
   background-color: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 0 30px rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-xl);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   padding: 2px;
@@ -484,7 +477,7 @@ p {
   top: 0;
   bottom: 0;
   width: 1px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-border-light);
 }
 
 .nav-item {
@@ -564,7 +557,7 @@ p {
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-full);
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border-medium);
   color: var(--text-primary);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
@@ -587,9 +580,9 @@ p {
 }
 
 .action-button:hover {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: var(--color-border-strong);
   background-color: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-glow-white);
   transform: translateY(-2px);
 }
 

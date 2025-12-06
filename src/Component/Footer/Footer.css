@@ -1,9 +1,10 @@
 
 /* Footer Styles */
 .footer {
-  background-color: #000000;
-  color: #f3f4f6;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-secondary);
   position: relative;
+  font-family: var(--font-primary);
 }
 
 /* Logo */
@@ -30,10 +31,10 @@
 
 /* Follow Us Text */
 .follow-us {
-  color: #ffffff;
+  color: var(--color-text-primary);
   font-weight: 800;
   font-size: 1.2rem;
-  
+  font-family: var(--font-heading);
 }
 
 /* Social Links */
@@ -50,21 +51,21 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: var(--color-border-light);
+  color: var(--color-text-primary);
   margin-left: 10px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
 }
 
 .social-link:hover {
-  background-color: #7a7a7a;
-  color: #ffffff;
+  background-color: var(--color-border-secondary);
+  color: var(--color-text-primary);
   transform: translateY(-3px);
 }
 
 /* Divider */
 .footer-divider {
-  border-color: rgba(255, 255, 255, 0.612);
+  border-color: var(--color-border-medium);
   margin: 1.5rem 0;
 }
 
@@ -75,22 +76,22 @@
 }
 
 .contact-email i {
-  color: #ff0000fd;
+  color: var(--color-primary);
 }
 
 .contact-email a {
-  color: #e5e5e5;
+  color: var(--color-text-secondary);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
 }
 
 .contact-email a:hover {
-  color: #ffffff;
+  color: var(--color-text-primary);
 }
 
 /* Copyright */
 .copyright {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
@@ -112,11 +113,12 @@
 
 /* Headings */
 .footer-heading {
-  color: #ffffff;
+  color: var(--color-text-primary);
   font-weight: 600;
   margin-bottom: 1.25rem;
   font-size: 1.125rem;
   position: relative;
+  font-family: var(--font-heading);
 }
 
 .footer-heading::after {
@@ -126,7 +128,7 @@
   bottom: -8px;
   height: 2px;
   width: 40px;
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
 }
 
 /* Links */
@@ -135,14 +137,14 @@
 }
 
 .footer-links a {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
   font-size: 0.95rem;
 }
 
 .footer-links a:hover {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 /* Social Links */
@@ -158,14 +160,14 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  transition: all 0.3s ease;
+  background-color: var(--color-border-light);
+  color: var(--color-text-primary);
+  transition: all var(--transition-base);
 }
 
 .social-link:hover {
-  background-color: #3b82f6;
-  color: #ffffff;
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
   transform: translateY(-3px);
 }
 
@@ -178,29 +180,29 @@
 
 .footer-contact i {
   margin-right: 10px;
-  color: #3b82f6;
+  color: var(--color-primary);
   font-size: 1.1rem;
 }
 
 .footer-contact a {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
 }
 
 .footer-contact a:hover {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 /* Divider */
 .footer-divider {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-border-light);
   margin: 1.5rem 0;
 }
 
 /* Copyright */
 .copyright {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
@@ -210,14 +212,14 @@
 }
 
 .footer-bottom-links a {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
 }
 
 .footer-bottom-links a:hover {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 /* Responsive Adjustments */

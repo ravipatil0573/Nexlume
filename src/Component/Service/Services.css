@@ -11,8 +11,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #000000;
+  background-color: var(--color-bg-primary);
   padding: 80px 20px;
+  font-family: var(--font-primary);
 }
 
 .full-screen-container .header {
@@ -24,8 +25,8 @@
 .full-screen-container .header h1 {
   font-size: clamp(2rem, 6vw, 3.5rem);
   font-weight: 700;
-  font-family: "Syne", sans-serif;
-  color: #ffffff;
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
   letter-spacing: -1.5px;
   line-height: 1.2;
   margin-bottom: 30px;
@@ -33,9 +34,9 @@
 
 .full-screen-container .header p {
   font-size: clamp(1rem, 2.5vw, 1.5rem);
-  font-family: "Outfit", serif;
+  font-family: var(--font-primary);
   font-weight: 300;
-  color: #b0b0b0;
+  color: var(--color-text-tertiary);
   line-height: 1.8;
   margin: 0;
 }
@@ -55,16 +56,16 @@
 
 .main-container {
   width: 100%;
-  background-color: #000000;
+  background-color: var(--color-bg-primary);
   padding: 80px 5%;
 }
 
 .main-container > .header {
   text-align: center;
-  color: #ffffff;
+  color: var(--color-text-primary);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
-  font-family: "Syne", sans-serif;
+  font-family: var(--font-heading);
   letter-spacing: -1.5px;
   margin-bottom: 60px;
   position: relative;
@@ -88,13 +89,13 @@
   padding: 40px 30px;
   margin-bottom: 20px;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border-light);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-slow);
 }
 
 .main-container .service-item::before {
@@ -116,8 +117,8 @@
 .main-container .service-item:hover {
   transform: translateY(-8px);
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(102, 126, 234, 0.3);
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
+  border-color: var(--color-border-medium);
+  box-shadow: var(--shadow-xl);
 }
 
 .main-container .service-item:hover::before {
@@ -150,15 +151,15 @@
   height: 80px;
   font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--color-text-primary);
   background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--color-border-light);
   border-radius: 50%;
-  transition: all 0.4s ease;
+  transition: all var(--transition-base);
 }
 
 .main-container .service-item:hover .numb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   border-color: transparent;
   transform: rotate(360deg) scale(1.1);
 }
@@ -166,26 +167,26 @@
 /* Service Description */
 .main-container .service-item p {
   font-size: 1rem;
-  color: #b0b0b0;
+  color: var(--color-text-tertiary);
   line-height: 1.7;
   margin: 0;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
 }
 
 .main-container .service-item:hover p {
-  color: #ffffff;
+  color: var(--color-text-primary);
 }
 
 /* Service Title */
 .main-container .service-item h2 {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 700;
-  font-family: "Syne", sans-serif;
-  color: #ffffff;
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
   text-transform: uppercase;
   letter-spacing: -1px;
   margin: 0;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
 }
 
 .main-container .service-item:hover h2 {
@@ -200,7 +201,7 @@
    ============================================== */
 
 .faqs-pg {
-  background-color: #000000;
+  background-color: var(--color-bg-primary);
 }
 
 .section-padding {
@@ -273,8 +274,8 @@
 .sec-head h2 {
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   font-weight: 700;
-  font-family: "Syne", sans-serif;
-  color: #ffffff;
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
   letter-spacing: -1.5px;
   line-height: 1.3;
   margin: 0;
@@ -286,14 +287,14 @@
 
 .faq-item {
   margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .faq-question {
   width: 100%;
   background: transparent;
   border: none;
-  color: #fff;
+  color: var(--color-text-primary);
   font-size: 1.2rem;
   font-weight: 600;
   padding: 15px 0;
@@ -302,11 +303,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: color 0.3s;
+  transition: color var(--transition-base);
+  font-family: var(--font-heading);
 }
 
 .faq-question:hover {
-  color: #667eea;
+  color: var(--color-primary);
 }
 
 .faq-icon {
@@ -328,7 +330,7 @@
 
 .faq-answer p {
   margin: 10px 0 0 0;
-  color: #ccc;
+  color: var(--color-text-tertiary);
 }
 
 /* ==============================================
@@ -357,7 +359,7 @@
 /* Accordion Button - MAIN FIX HERE */
 .faqs-pg .accordion-button {
   background-color: transparent !important;
-  color: #ffffff !important;
+  color: var(--color-text-primary) !important;
   font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.5;
@@ -365,19 +367,20 @@
   border: none !important;
   box-shadow: none !important;
   position: relative;
-  transition: color 0.3s ease;
+  transition: color var(--transition-base);
+  font-family: var(--font-heading);
 }
 
 /* Hover state - all buttons */
 .faqs-pg .accordion-button:hover {
-  color: #667eea !important;
+  color: var(--color-primary) !important;
   background-color: transparent !important;
 }
 
 /* Expanded state (when NOT collapsed) - purple color */
 .faqs-pg .accordion-button:not(.collapsed) {
   background-color: transparent !important;
-  color: #667eea !important;
+  color: var(--color-primary) !important;
   box-shadow: none !important;
 }
 
@@ -437,14 +440,15 @@
 /* Accordion Body - Answer text */
 .faqs-pg .accordion-body {
   padding: 0 60px 24px 0;
-  color: #cccccc;
+  color: var(--color-text-tertiary);
   font-size: 1rem;
   line-height: 1.7;
+  font-family: var(--font-primary);
 }
 
 .faqs-pg .accordion-body p {
   margin: 0;
-  color: #cccccc;
+  color: var(--color-text-tertiary);
 }
 
 /* Utility Classes */

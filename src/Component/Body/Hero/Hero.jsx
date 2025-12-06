@@ -88,17 +88,18 @@ export default function Hero() {
 
             {/* Main Heading */}
             <h1 className="hero-heading mb-4 mb-md-5">
-              I help founders turn ideas
+            Transforming ideas into digital experiences
               <br />
-              into seamless <em>digital experiences</em>
+              with our agency<em> NexLume</em>
             </h1>
 
             {/* Personal Introduction */}
-            <div className="intro-section mb-4 mb-md-5">
+            {/* <div className="intro-section mb-4 mb-md-5">
               <p className="intro-text mb-3">
-                Hello, I'm <span className="name-highlight">Aayush Bharti</span>
-              </p>
-              <div className="profile-container d-inline-flex align-items-center gap-3 mb-3">
+              Welcome to 
+              <span className="name-highlight"> <em>NexLume</em></span>
+              </p> */}
+              {/* <div className="profile-container d-inline-flex align-items-center gap-3 mb-3">
                 <div className="profile-image-wrapper">
                   <img
                     src={profileImage}
@@ -114,9 +115,9 @@ export default function Hero() {
                     }}
                   />
                 </div>
-                <span className="role-text">a Full Stack Developer</span>
-              </div>
-            </div>
+                <span className="role-text">Your Full-Stack Development Partner</span>
+              </div> */}
+            {/* </div> */}
 
             {/* Call to Action */}
             <div className="cta-section d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 gap-md-4">

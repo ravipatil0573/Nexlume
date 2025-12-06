@@ -12,6 +12,7 @@ import Aman from "../../assets/Team/aman.jpg";
 import Prajwal from "../../assets/Team/Pk.jpg";
 import Sanath from "../../assets/Team/anna.jpg";
 import GroupImage from "../../assets/Team/group-image.jpg";
+import TeamEmailImage from "../../assets/Team/team-email.jpg";
 
 // =========================
 // TEAM DATA
@@ -221,7 +222,7 @@ const Team = () => {
         </div>
       </section>
 
-      <div className="join-team">
+      <div className="join-team" style={{ backgroundImage: `url(${TeamEmailImage})` }}>
         <div className="join-container">
           <h1>Create | Innovate | Transform – with NexLume!</h1>
           <p className="subtitle">

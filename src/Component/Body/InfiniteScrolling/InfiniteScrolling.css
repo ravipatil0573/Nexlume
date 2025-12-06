@@ -1,6 +1,6 @@
 /* Infinite Scrolling Logos Section */
 #infinite-scrolling {
-  background-color: #000000;
+  background-color: var(--color-bg-primary);
   overflow: hidden;
   padding: 3rem 0;
 }
@@ -8,7 +8,7 @@
 .section-title {
   margin-bottom: 2rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-muted);
 }
 
 /* Wrapper for each row */

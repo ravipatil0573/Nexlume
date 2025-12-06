@@ -5,8 +5,7 @@ import InfiniteScroll from "./Component/Body/InfiniteScrolling/InfiniteScrolling
 import VideoDescription from "./Component/Body/VideoDescription/VideoDescription";
 import ProjectsSection from "./Component/Body/ProjectsSection/ProjectsSection";
 import ServicesSection from "./Component/Body/ServicesSection/ServicesSection";
-import ScrollVelocity from "./Component/Body/ScrollVelocity/ScrollVelocity";
-import TestimonialsSection from "./Component/Body/TestimonialsSection/TestimonialsSection";
+// import ScrollVelocity from "./Component/Body/ScrollVelocity/ScrollVelocity";
 import "./Home.css";
 
 const Home = () => {
@@ -38,14 +37,13 @@ const Home = () => {
       <Hero />
       <InfiniteScroll />
       <VideoDescription />
-      <ScrollVelocity
-        texts={["Web Development", "Web Design"]}
+      {/* <ScrollVelocity
+        texts={["Creative Websites", "Digital Experiences"]}
         velocity={100}
         className="custom-scroll-text"
-      />
+      /> */}
       <ProjectsSection />
       <ServicesSection />
-      <TestimonialsSection />
     </div>
   );
 };
