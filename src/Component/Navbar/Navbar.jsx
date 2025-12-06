@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -7,24 +7,31 @@ import "./Navbar.css";
 import logoImage from "../../assets/logo.png"; // Import the logo image
 
 const Navbar = () => {
-  // const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // // Handle scroll effect
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     if (window.scrollY > 50) {
-  //       setScrolled(true);
-  //     } else {
-  //       setScrolled(false);
-  //     }
-  //   };
+  // Toggle menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+  // Close menu when clicking on a link
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
 
   return (
-    // <header className={`fixed-top ${scrolled ? "navbar-scrolled" : ""}`}>
     <header className="">
       <nav className="navbar navbar-dark bg-black">
         <div className="container-fluid px-0">
@@ -60,43 +67,65 @@ const Navbar = () => {
               />
             </Link>
             <button
-              className="navbar-toggler border-0"
+              className={`navbar-toggler border-0 ${isMenuOpen ? "active" : ""}`}
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarContent"
-              aria-controls="navbarContent"
-              aria-expanded="false"
+              onClick={toggleMenu}
               aria-label="Toggle navigation"
             >
-              <span className="navbar-toggler-icon"></span>
+              <span className="hamburger-icon">
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+              </span>
             </button>
           </div>
 
-          {/* Mobile menu */}
-          <div className="collapse navbar-collapse" id="navbarContent">
-            <ul className="navbar-nav d-lg-none text-center mt-3">
-              <li className="nav-item">
-                <Link className="nav-link text-white py-2" to="/projects">
-                  PROJECTS
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white py-2" to="/services">
-                  SERVICES
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white py-2" to="/team">
-                  TEAM
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-white py-2" to="/contact">
-                  CONTACT
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Mobile menu popup overlay */}
+          {isMenuOpen && (
+            <div className="mobile-menu-overlay">
+              <div className="mobile-menu-backdrop" onClick={toggleMenu}></div>
+              <div className="mobile-menu-content">
+                <ul className="navbar-nav d-lg-none text-center">
+                  <li className="nav-item">
+                    <Link 
+                      className="nav-link text-white py-2" 
+                      to="/projects"
+                      onClick={handleLinkClick}
+                    >
+                      PROJECTS
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link 
+                      className="nav-link text-white py-2" 
+                      to="/services"
+                      onClick={handleLinkClick}
+                    >
+                      SERVICES
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link 
+                      className="nav-link text-white py-2" 
+                      to="/team"
+                      onClick={handleLinkClick}
+                    >
+                      TEAM
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link 
+                      className="nav-link text-white py-2" 
+                      to="/contact"
+                      onClick={handleLinkClick}
+                    >
+                      CONTACT
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
     </header>

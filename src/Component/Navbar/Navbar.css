@@ -50,8 +50,52 @@
 }
 
 /* Remove border from toggler */
+.navbar-toggler {
+  border: none !important;
+  padding: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  z-index: 1050;
+  position: relative;
+}
+
 .navbar-toggler:focus {
   box-shadow: none;
+  outline: none;
+}
+
+/* Hamburger Icon Animation */
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  position: relative;
+}
+
+.hamburger-line {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger to Cross Animation */
+.navbar-toggler.active .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.navbar-toggler.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.navbar-toggler.active .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Desktop Navigation */
@@ -66,21 +110,74 @@
   padding: 0 1.5rem !important;
 }
 
-/* Mobile menu styling */
+/* Mobile menu styling - Popup Overlay */
 @media (max-width: 991.98px) {
-  .navbar-collapse {
-    padding: 1rem 0;
+  /* Mobile menu overlay container */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1040;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+  /* Backdrop overlay */
+  .mobile-menu-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1041;
+  }
+  
+  /* Menu content container */
+  .mobile-menu-content {
+    position: relative;
+    width: 100%;
+    background-color: #000000;
+    z-index: 1042;
+    padding: 6rem 1rem 2rem 1rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .nav-item {
     text-align: center;
-    padding: 0.25rem 0;
+    padding: 0.75rem 0;
+    display: block;
+    visibility: visible;
   }
   
   /* Add more space between mobile menu items */
+  .navbar-nav {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
   .navbar-nav .nav-link {
-    padding: 0.5rem 0 !important;
-    font-size: 1.1rem;
+    padding: 1.25rem 0 !important;
+    font-size: 1.3rem;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 2px;
   }
 }
 
