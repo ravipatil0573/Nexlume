@@ -58,11 +58,11 @@
 
 .view-all-btn:hover,
 .view-all-btn.hovered {
-  background-color: var(--color-text-primary);
-  color: var(--color-text-on-primary);
-  border-color: var(--color-text-primary);
+  background-color: #C80000;
+  color: #ffffff;
+  border-color: #C80000;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-glow-white);
+  box-shadow: 0 0 20px rgba(200, 0, 0, 0.3);
 }
 
 .view-all-btn i {
@@ -165,6 +165,11 @@
   font-family: var(--font-heading);
 }
 
+.service-card:hover .service-title,
+.service-card.hovered .service-title {
+  color: #C80000;
+}
+
 .service-description {
   color: var(--color-text-muted);
   font-size: 0.95rem;
@@ -181,11 +186,11 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--color-text-primary);
+  background-color: #C80000;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-on-primary);
+  color: #ffffff;
   font-size: 1rem;
   transition: all var(--transition-base);
   z-index: 3;

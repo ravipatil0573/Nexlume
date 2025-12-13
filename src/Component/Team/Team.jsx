@@ -217,12 +217,17 @@ const Team = () => {
         </div>
 
         <div id="teams" className="team-main-container">
-          <h2 className="header-team">The People Behind the Vision</h2>
+          <h2 className="header-team text-center">
+            The People Behind the Vision
+          </h2>
           <TeamCard items={demo} />
         </div>
       </section>
 
-      <div className="join-team" style={{ backgroundImage: `url(${TeamEmailImage})` }}>
+      <div
+        className="join-team"
+        style={{ backgroundImage: `url(${TeamEmailImage})` }}
+      >
         <div className="join-container">
           <h1>Create | Innovate | Transform – with NexLume!</h1>
           <p className="subtitle">

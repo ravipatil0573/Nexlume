@@ -143,36 +143,50 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: 300px;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid #333;
-  transition: border-color 0.3s ease;
-  background: var(--card-gradient);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-gradient, #111);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 
   --mouse-x: 50%;
   --mouse-y: 50%;
   --spotlight-color: rgba(255, 255, 255, 0.3);
 }
 
+/* Enhanced hover effects */
 .team-card:hover {
-  border-color: var(--card-border);
-}
-.team-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #333;
-  background: var(--card-gradient, #111);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--card-border, rgba(255, 255, 255, 0.3));
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(200, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.team-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--card-border, #555);
+/* Card spotlight effect on hover */
+.team-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.team-card:hover::before {
+  opacity: 1;
 }
 
 /* --- IMAGE --- */

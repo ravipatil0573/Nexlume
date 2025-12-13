@@ -36,7 +36,7 @@ const ProjectsSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Enhanced Heading */}
         <div className="text-center mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-6 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent tracking-tight">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-6 bg-gradient-to-r from-red-800 via-red-800 to-red-800 bg-clip-text text-transparent tracking-tight">
             Our Projects
           </h2>
           <div className="w-20 h-1 mx-auto mb-6 bg-gradient-to-r from-white to-gray-400 rounded-full"></div>
@@ -46,26 +46,75 @@ const ProjectsSection = () => {
         </div>
 
         {/* Project Cards */}
-        <div className="max-w-5xl mx-auto space-y-8 md:space-y-12 lg:space-y-16">
+        <div className="max-w-5xl mx-auto space-y-6 md:space-y-10 lg:space-y-14">
           {projects.map((project, index) => (
             <div
               key={index}
-              className="group relative bg-bg-card border border-borderCustom-primary rounded-2xl md:rounded-3xl overflow-hidden transition-all duration-500 ease-out hover:border-borderCustom-secondary hover:shadow-2xl hover:shadow-glow-white hover:-translate-y-2"
+              className="group relative bg-[#0a0a0a] border border-[#C80000]/50 rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden transition-all duration-500 ease-out hover:border-[#C80000] hover:shadow-2xl hover:shadow-red-500/10 hover:-translate-y-1"
             >
-              {/* Subtle glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/2 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              <div className="relative p-6 sm:p-8 md:p-10 lg:p-12">
-                {/* Project Header */}
-                <div className="mb-6 md:mb-8">
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-text-primary mb-4 tracking-tight leading-tight">
-                    {project.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-2 md:gap-3">
+              {/* Mobile Layout: Video First with Overlay Content */}
+              <div className="block lg:hidden">
+                {/* Video Container */}
+                <div className="relative w-full aspect-[16/10] overflow-hidden">
+                  <video
+                    className="absolute inset-0 w-full h-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    <source src={project.video} type="video/mp4" />
+                  </video>
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                  
+                  {/* Tags floating on video */}
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                     {project.tags.map((tag, i) => (
                       <span
                         key={i}
-                        className="inline-block px-4 py-2 text-xs sm:text-sm font-medium text-text-muted bg-bg-surface border border-borderCustom-primary rounded-full transition-all duration-300 hover:bg-bg-elevated hover:border-borderCustom-secondary hover:text-text-primary"
+                        className="px-2.5 py-1 text-[10px] font-medium text-white/90 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Content Below Video */}
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-lg sm:text-xl font-heading font-bold text-white mb-1.5 tracking-tight bg-gradient-to-r from-red-600 via-white to-red-600 bg-clip-text text-transparent">
+                    {project.title}
+                  </h3>
+                  
+                  <p className="text-xs sm:text-sm md:text-base text-gray-400 leading-relaxed mb-2.5 line-clamp-2">
+                    {project.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between gap-2">
+                    <button className="group/btn inline-flex items-center gap-1 px-3 py-1 text-[10px] font-medium text-white bg-red-600 rounded-full transition-all duration-300 hover:bg-red-700 hover:shadow-md hover:shadow-red-500/25">
+                      <span>View</span>
+                      <svg className="w-2.5 h-2.5 transition-transform duration-300 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </button>
+                    <span className="text-[10px] text-gray-500 italic truncate">{project.tagline}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout: Full Content */}
+              <div className="hidden lg:block relative p-8 xl:p-10">
+                {/* Project Header */}
+                <div className="mb-5">
+                  <h3 className="text-4xl xl:text-5xl font-heading font-bold text-white mb-4 tracking-tight bg-gradient-to-r from-red-600 via-white to-red-600 bg-clip-text text-transparent">
+                    {project.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        className="inline-block px-4 py-1.5 text-sm font-medium text-gray-300 bg-white/5 border border-white/10 rounded-full transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:text-white"
                       >
                         {tag}
                       </span>
@@ -74,18 +123,21 @@ const ProjectsSection = () => {
                 </div>
 
                 {/* Description */}
-                <p className="text-sm sm:text-base md:text-lg text-text-tertiary leading-relaxed mb-6 md:mb-8 font-light max-w-3xl">
+                <p className="text-lg text-gray-400 leading-relaxed mb-6 max-w-3xl">
                   {project.description}
                 </p>
 
                 {/* Button */}
-                <button className="relative inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-4 mb-6 md:mb-8 text-sm md:text-base font-semibold text-text-on-primary bg-secondary rounded-lg overflow-hidden transition-all duration-300 hover:bg-gray-100 hover:shadow-lg hover:shadow-glow-white hover:-translate-y-1 active:translate-y-0">
-                  <span className="relative z-10 tracking-wide">MORE ABOUT THIS PROJECT</span>
+                <button className="group/btn inline-flex items-center gap-2 px-6 py-3 mb-6 text-sm font-medium tracking-wide text-white bg-red-600 rounded-full transition-all duration-300 hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/20">
+                  <span>VIEW</span>
+                  <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
                 </button>
 
                 {/* Video Preview */}
-                <div className="relative bg-bg-primary rounded-xl md:rounded-2xl overflow-hidden border border-borderCustom-primary group-hover:border-borderCustom-secondary transition-all duration-300">
-                  <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[450px] bg-bg-primary">
+                <div className="relative rounded-xl overflow-hidden border border-white/10">
+                  <div className="relative w-full h-[380px]">
                     <video
                       className="absolute inset-0 w-full h-full object-cover"
                       autoPlay
@@ -94,14 +146,11 @@ const ProjectsSection = () => {
                       playsInline
                     >
                       <source src={project.video} type="video/mp4" />
-                      Your browser does not support the video tag.
                     </video>
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                     
-                    {/* Tagline overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10 flex items-end justify-center">
-                      <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-text-primary font-light text-center tracking-wide">
+                    <div className="absolute bottom-0 left-0 right-0 p-8 flex items-end justify-center">
+                      <p className="text-xl text-white font-light text-center tracking-wide">
                         {project.tagline}
                       </p>
                     </div>

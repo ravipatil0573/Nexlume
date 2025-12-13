@@ -1,60 +1,28 @@
 /* ============================================
-   NEXLUME - GLOBAL STYLES & DESIGN SYSTEM
+   NEXLUME - GLOBAL CSS VARIABLES
+   All design tokens declared here
    ============================================ */
 
-/* ============================================
-   FONT FAMILY
-   ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
   /* ============================================
-     FONT FAMILIES
+     FONTS
      ============================================ */
-  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  
-  /* Font Weights */
-  --font-weight-light: 300;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --font-weight-extrabold: 800;
-  --font-weight-black: 900;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Poppins', -apple-system, sans-serif;
+  --font-primary: var(--font-body);
+  --font-display: var(--font-heading);
 
   /* ============================================
-     COLOR SYSTEM - BLACK THEME
+     COLORS - Background
      ============================================ */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #111111;
+  --bg-elevated: #1a1a1a;
   
-  /* Primary Colors (Red Accent) */
-  --color-primary: #ff0000;
-  --color-primary-50: #fff1f1;
-  --color-primary-100: #ffdfdf;
-  --color-primary-200: #ffc4c4;
-  --color-primary-300: #ff9a9a;
-  --color-primary-400: #ff6060;
-  --color-primary-500: #ff0000;
-  --color-primary-600: #cc0000;
-  --color-primary-700: #990000;
-  --color-primary-800: #660000;
-  --color-primary-900: #330000;
-  
-  /* Secondary Colors (White/Gray) */
-  --color-secondary: #ffffff;
-  --color-secondary-50: #ffffff;
-  --color-secondary-100: #f9fafb;
-  --color-secondary-200: #f3f4f6;
-  --color-secondary-300: #e5e7eb;
-  --color-secondary-400: #d1d5db;
-  --color-secondary-500: #9ca3af;
-  --color-secondary-600: #6b7280;
-  --color-secondary-700: #4b5563;
-  --color-secondary-800: #374151;
-  --color-secondary-900: #1f2937;
-
-  /* Background Colors */
+  /* Legacy names (used in some components) */
   --color-bg-primary: #000000;
   --color-bg-secondary: #0a0a0a;
   --color-bg-tertiary: #111111;
@@ -62,88 +30,84 @@
   --color-bg-surface: #1f1f1f;
   --color-bg-elevated: #262626;
 
-  /* Text Colors */
+  /* ============================================
+     COLORS - Text
+     ============================================ */
+  --text-white: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-dim: #737373;
+  
+  /* Legacy names */
   --color-text-primary: #ffffff;
   --color-text-secondary: #e5e5e5;
   --color-text-tertiary: #d1d5db;
   --color-text-muted: #9ca3af;
   --color-text-disabled: #6b7280;
   --color-text-on-primary: #000000;
-  --color-text-on-secondary: #ffffff;
 
-  /* Border Colors */
+  /* ============================================
+     COLORS - Accent (Deep Red Theme)
+     ============================================ */
+  --accent-primary: #C80000;
+  --accent-primary-light: #FF0000;
+  --accent-primary-dark: #960000;
+  --accent-secondary: #FF3333;
+  --accent-secondary-light: #FF6666;
+  
+  /* Gradient */
+  --gradient-accent: linear-gradient(135deg, #C80000 0%, #FF0000 100%);
+  
+  /* Legacy names */
+  --color-primary: #C80000;
+  --color-primary-600: #960000;
+
+  /* ============================================
+     COLORS - Border
+     ============================================ */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  
+  /* Legacy names */
   --color-border-primary: #262626;
   --color-border-secondary: #404040;
-  --color-border-tertiary: #525252;
   --color-border-light: rgba(255, 255, 255, 0.1);
   --color-border-medium: rgba(255, 255, 255, 0.2);
-  --color-border-strong: rgba(255, 255, 255, 0.3);
-
-  /* Status Colors */
-  --color-success: #22c55e;
-  --color-success-light: #4ade80;
-  --color-success-dark: #16a34a;
-  --color-warning: #fbbf24;
-  --color-warning-light: #fcd34d;
-  --color-warning-dark: #d97706;
-  --color-error: #ef4444;
-  --color-error-light: #f87171;
-  --color-error-dark: #dc2626;
-  --color-info: #3b82f6;
-  --color-info-light: #60a5fa;
-  --color-info-dark: #2563eb;
-
-  /* Gradient Colors */
-  --gradient-primary: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
-  --gradient-secondary: linear-gradient(135deg, #ffffff 0%, #e5e5e5 100%);
-  --gradient-text: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%);
-  --gradient-overlay: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
-
-  /* Shadow Colors */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
-  --shadow-glow-red: 0 0 20px rgba(255, 0, 0, 0.3), 0 0 40px rgba(255, 0, 0, 0.1);
-  --shadow-glow-white: 0 0 20px rgba(255, 255, 255, 0.1), 0 0 40px rgba(255, 255, 255, 0.05);
 
   /* ============================================
-     SPACING SYSTEM
+     SPACING
      ============================================ */
-  --spacing-xs: 0.25rem;   /* 4px */
-  --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 1rem;      /* 16px */
-  --spacing-lg: 1.5rem;    /* 24px */
-  --spacing-xl: 2rem;      /* 32px */
-  --spacing-2xl: 3rem;     /* 48px */
-  --spacing-3xl: 4rem;     /* 64px */
-  --spacing-4xl: 6rem;     /* 96px */
-
-  /* ============================================
-     BORDER RADIUS
-     ============================================ */
-  --radius-sm: 0.25rem;    /* 4px */
-  --radius-md: 0.5rem;     /* 8px */
-  --radius-lg: 0.75rem;    /* 12px */
-  --radius-xl: 1rem;       /* 16px */
-  --radius-2xl: 1.5rem;    /* 24px */
-  --radius-3xl: 2rem;      /* 32px */
-  --radius-full: 9999px;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
 
   /* ============================================
      TRANSITIONS
      ============================================ */
-  --transition-fast: 150ms ease-in-out;
-  --transition-base: 300ms ease-in-out;
-  --transition-slow: 500ms ease-in-out;
-  --transition-slower: 700ms ease-in-out;
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* ============================================
+     SHADOWS
+     ============================================ */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 20px rgba(200, 0, 0, 0.3);
 }
 
 /* ============================================
-   GLOBAL STYLES
+   GLOBAL BASE STYLES
    ============================================ */
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -154,126 +118,21 @@ html {
 }
 
 body {
-  font-family: var(--font-primary);
-  font-weight: var(--font-weight-normal);
+  font-family: var(--font-body);
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   line-height: 1.2;
   color: var(--color-text-primary);
 }
 
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
-
-/* Font Family Utilities */
-.font-primary {
-  font-family: var(--font-primary);
-}
-
-.font-heading {
-  font-family: var(--font-heading);
-}
-
-.font-display {
-  font-family: var(--font-display);
-}
-
-/* Color Utilities */
-.text-primary {
-  color: var(--color-text-primary);
-}
-
-.text-secondary {
-  color: var(--color-text-secondary);
-}
-
-.text-tertiary {
-  color: var(--color-text-tertiary);
-}
-
-.text-muted {
-  color: var(--color-text-muted);
-}
-
-.bg-primary {
-  background-color: var(--color-bg-primary);
-}
-
-.bg-secondary {
-  background-color: var(--color-bg-secondary);
-}
-
-.bg-card {
-  background-color: var(--color-bg-card);
-}
-
-/* Border Utilities */
-.border-primary {
-  border-color: var(--color-border-primary);
-}
-
-.border-secondary {
-  border-color: var(--color-border-secondary);
-}
-
-.border-light {
-  border-color: var(--color-border-light);
-}
-
-/* ============================================
-   TAILWIND CSS VARIABLES (HSL Format)
-   ============================================ */
-:root {
-  /* Background */
-  --background: 0 0% 0%;
-  --foreground: 0 0% 100%;
-
-  /* Card */
-  --card: 0 0% 10%;
-  --card-foreground: 0 0% 100%;
-
-  /* Popover */
-  --popover: 0 0% 10%;
-  --popover-foreground: 0 0% 100%;
-
-  /* Primary (Red) */
-  --primary: 0 100% 50%;
-  --primary-foreground: 0 0% 100%;
-
-  /* Secondary (Gray) */
-  --secondary: 0 0% 50%;
-  --secondary-foreground: 0 0% 100%;
-
-  /* Muted */
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 65%;
-
-  /* Accent */
-  --accent: 0 0% 15%;
-  --accent-foreground: 0 0% 100%;
-
-  /* Destructive */
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-
-  /* Border */
-  --border: 0 0% 20%;
-
-  /* Input */
-  --input: 0 0% 20%;
-
-  /* Ring */
-  --ring: 0 100% 50%;
-
-  /* Radius */
-  --radius: 0.5rem;
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
 }
