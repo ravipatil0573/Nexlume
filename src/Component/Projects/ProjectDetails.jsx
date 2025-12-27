@@ -71,7 +71,7 @@ const normalizeProject = (src = {}) => {
 // Page Component
 // -------------------------------------------
 export default function ProjectDetails() {
-  const { projectId } = useParams();
+  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -113,6 +113,11 @@ export default function ProjectDetails() {
     [serverProject, stateProject]
   );
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
+
   // Load fonts when we know families
   useEffect(() => {
     const p = serverProject || stateProject;
@@ -129,18 +134,27 @@ export default function ProjectDetails() {
 
     const tryFetch = async () => {
       try {
-        const id = Number(projectId);
-        const endpoint = Number.isFinite(id)
-          ? `${API_BASE}/api/projects/${id}`
-          : `${API_BASE}/api/projects/slug/${encodeURIComponent(projectId)}`;
+        const projectId = Number(id);
+        const endpoint = Number.isFinite(projectId)
+          ? `${API_BASE}/api/projects/${projectId}`
+          : `${API_BASE}/api/projects/slug/${encodeURIComponent(id)}`;
 
+        console.log(`🔍 Fetching project from: ${endpoint}`);
         setLoading(true);
         const res = await fetch(endpoint);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
+        if (!res.ok) {
+          console.error(`❌ API Error: HTTP ${res.status} - ${res.statusText}`);
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
         const json = await res.json();
+        console.log(`✅ Project data received:`, json);
+        
         if (!isMounted) return;
         setServerProject(normalizeProject(json));
-      } catch {
+      } catch (error) {
+        console.error(`❌ Failed to fetch project:`, error);
         if (!isMounted) return;
         setServerProject(null);
       } finally {
@@ -152,7 +166,7 @@ export default function ProjectDetails() {
     return () => {
       isMounted = false;
     };
-  }, [projectId]);
+  }, [id]);
 
   // IntersectionObserver to track active section with improved threshold
   useEffect(() => {

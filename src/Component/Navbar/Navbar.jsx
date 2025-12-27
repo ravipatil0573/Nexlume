@@ -37,24 +37,32 @@ const Navbar = () => {
         <div className="container-fluid px-0">
           {/* Desktop Navigation */}
           <div className="desktop-nav d-none d-lg-flex">
-            <Link className="nav-link" to="/projects">
-              PROJECTS
-            </Link>
-            <Link className="nav-link" to="/services">
-              SERVICES
-            </Link>
+            {/* Left links */}
+            <div className="nav-left">
+              <Link className="nav-link" to="/projects">
+                PROJECTS
+              </Link>
+              <Link className="nav-link" to="/services">
+                SERVICES
+              </Link>
+            </div>
 
             {/* Center logo */}
-            <Link to="/" className="navbar-brand">
-              <img src={logoImage} alt="NEXLUME Logo" className="logo-img" />
-            </Link>
+            <div className="nav-center">
+              <Link to="/" className="navbar-brand">
+                <img src={logoImage} alt="NEXLUME Logo" className="logo-img" />
+              </Link>
+            </div>
 
-            <Link className="nav-link" to="/team">
-              TEAM
-            </Link>
-            <Link className="nav-link" to="/contact">
-              CONTACT
-            </Link>
+            {/* Right links */}
+            <div className="nav-right">
+              <Link className="nav-link" to="/team">
+                TEAM
+              </Link>
+              <Link className="nav-link" to="/contact">
+                CONTACT
+              </Link>
+            </div>
           </div>
 
           {/* Mobile view */}
@@ -87,8 +95,8 @@ const Navbar = () => {
               <div className="mobile-menu-content">
                 <ul className="navbar-nav d-lg-none text-center">
                   <li className="nav-item">
-                    <Link 
-                      className="nav-link text-white py-2" 
+                    <Link
+                      className="nav-link text-white py-2"
                       to="/projects"
                       onClick={handleLinkClick}
                     >
@@ -96,8 +104,8 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link 
-                      className="nav-link text-white py-2" 
+                    <Link
+                      className="nav-link text-white py-2"
                       to="/services"
                       onClick={handleLinkClick}
                     >
@@ -105,8 +113,8 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link 
-                      className="nav-link text-white py-2" 
+                    <Link
+                      className="nav-link text-white py-2"
                       to="/team"
                       onClick={handleLinkClick}
                     >
@@ -114,8 +122,8 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link 
-                      className="nav-link text-white py-2" 
+                    <Link
+                      className="nav-link text-white py-2"
                       to="/contact"
                       onClick={handleLinkClick}
                     >

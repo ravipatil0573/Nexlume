@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SafarnamaVideo from "../../../assets/Video/SafarNamaVideo.mp4";
 import NexshowVideo from "../../../assets/Video/NexShow.mp4";
 import StyloraVideo from "../../../assets/Video/StyloraVideo.mp4";
 
-const projects = [
+// 👉 Backend base URL (set VITE_API_BASE in your frontend .env to override)
+const API_BASE = import.meta.env?.VITE_API_BASE || "http://localhost:5000";
+
+// Video mapping for projects (by ID or title)
+const videoMap = {
+  1: SafarnamaVideo,
+  2: NexshowVideo,
+  3: StyloraVideo,
+  SAFARNAMA: SafarnamaVideo,
+  NEXSHOW: NexshowVideo,
+  STYLORA: StyloraVideo,
+};
+
+// Tagline mapping for projects
+const taglineMap = {
+  1: "Where Adventure Meets Simplicity",
+  2: "Where Cinema Meets Convenience",
+  3: "Where Style Meets Simplicity",
+  SAFARNAMA: "Where Adventure Meets Simplicity",
+  NEXSHOW: "Where Cinema Meets Convenience",
+  STYLORA: "Where Style Meets Simplicity",
+};
+
+// Fallback projects data (used when API fails or on mobile devices)
+const fallbackProjects = [
   {
+    id: 1,
     title: "SAFARNAMA",
     tags: ["Tours and Travel", "Logo Design"],
     description:
@@ -13,6 +39,7 @@ const projects = [
     tagline: "Where Adventure Meets Simplicity",
   },
   {
+    id: 2,
     title: "NEXSHOW",
     tags: ["Movie Booking", "Logo Design"],
     description:
@@ -21,6 +48,7 @@ const projects = [
     tagline: "Where Cinema Meets Convenience",
   },
   {
+    id: 3,
     title: "STYLORA",
     tags: ["E-commerce", "Logo Design"],
     description:
@@ -31,6 +59,74 @@ const projects = [
 ];
 
 const ProjectsSection = () => {
+  const navigate = useNavigate();
+  const [projects, setProjects] = useState(fallbackProjects); // Initialize with fallback
+
+  // Fetch projects from backend
+  useEffect(() => {
+    let isMounted = true;
+    
+    // Try to fetch from API, but always have fallback ready
+    fetch(`${API_BASE}/api/projects`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((json) => {
+        if (!isMounted) return;
+        
+        // backend returns { data: [...] } or array directly
+        const list = Array.isArray(json) ? json : json.data || [];
+        
+        // Only update if we got valid projects from API
+        if (list.length > 0 && Array.isArray(list)) {
+          try {
+            // Map backend data to include video and tagline
+            const mappedProjects = list.map((project) => ({
+              ...project,
+              video: project.video || videoMap[project.id] || videoMap[project.title] || videoMap[project.title?.toUpperCase()],
+              tagline: project.tagline || taglineMap[project.id] || taglineMap[project.title] || taglineMap[project.title?.toUpperCase()],
+              // Ensure description is a string (backend might return array)
+              description: Array.isArray(project.description) 
+                ? project.description.join(" ") 
+                : project.description || project.overview || "",
+            }));
+            
+            // Only update if we successfully mapped projects with valid data
+            if (mappedProjects.length > 0 && mappedProjects.every(p => p.title && p.id)) {
+              setProjects(mappedProjects);
+            } else {
+              console.warn("API returned invalid projects, using fallback");
+              // Keep fallback projects
+            }
+          } catch (error) {
+            console.error("Error mapping projects, using fallback:", error);
+            // Keep fallback projects
+          }
+        } else {
+          console.warn("API returned empty or invalid data, using fallback");
+          // Keep fallback projects
+        }
+      })
+      .catch((e) => {
+        console.error("Failed to load projects from API, using fallback data:", e);
+        // Keep fallback projects - they're already set as initial state
+      });
+      
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleViewProject = (projectId) => {
+    // Scroll to top before navigating
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Small delay to ensure smooth scroll starts before navigation
+    setTimeout(() => {
+      navigate(`/projects/${projectId}`);
+    }, 100);
+  };
+
   return (
     <section className="relative min-h-screen bg-bg-primary overflow-hidden py-16 md:py-24 lg:py-32 font-primary">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -67,23 +163,11 @@ const ProjectsSection = () => {
                   </video>
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-                  
-                  {/* Tags floating on video */}
-                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                    {project.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="px-2.5 py-1 text-[10px] font-medium text-white/90 bg-black/40 backdrop-blur-sm border border-white/20 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
                 </div>
                 
                 {/* Content Below Video */}
                 <div className="p-3 sm:p-4">
-                  <h3 className="text-lg sm:text-xl font-heading font-bold text-white mb-1.5 tracking-tight bg-gradient-to-r from-red-600 via-white to-red-600 bg-clip-text text-transparent">
+                  <h3 className="text-lg sm:text-xl font-heading font-bold text-white mb-0.5 tracking-tight bg-gradient-to-r from-red-600 via-white to-red-600 bg-clip-text text-transparent">
                     {project.title}
                   </h3>
                   
@@ -92,7 +176,10 @@ const ProjectsSection = () => {
                   </p>
                   
                   <div className="flex items-center justify-between gap-2">
-                    <button className="group/btn inline-flex items-center gap-1 px-3 py-1 text-[10px] font-medium text-white bg-red-600 rounded-full transition-all duration-300 hover:bg-red-700 hover:shadow-md hover:shadow-red-500/25">
+                    <button 
+                      onClick={() => handleViewProject(project.id)}
+                      className="group/btn inline-flex items-center gap-1 px-3 py-1 text-[10px] font-medium text-white bg-red-600 rounded-full transition-all duration-300 hover:bg-red-700 hover:shadow-md hover:shadow-red-500/25"
+                    >
                       <span>View</span>
                       <svg className="w-2.5 h-2.5 transition-transform duration-300 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -107,19 +194,9 @@ const ProjectsSection = () => {
               <div className="hidden lg:block relative p-8 xl:p-10">
                 {/* Project Header */}
                 <div className="mb-5">
-                  <h3 className="text-4xl xl:text-5xl font-heading font-bold text-white mb-4 tracking-tight bg-gradient-to-r from-red-600 via-white to-red-600 bg-clip-text text-transparent">
+                  <h3 className="text-4xl xl:text-5xl font-heading font-bold text-white mb-1 tracking-tight bg-gradient-to-r from-red-600 via-white to-red-600 bg-clip-text text-transparent">
                     {project.title}
                   </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="inline-block px-4 py-1.5 text-sm font-medium text-gray-300 bg-white/5 border border-white/10 rounded-full transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:text-white"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
                 </div>
 
                 {/* Description */}
@@ -128,7 +205,10 @@ const ProjectsSection = () => {
                 </p>
 
                 {/* Button */}
-                <button className="group/btn inline-flex items-center gap-2 px-6 py-3 mb-6 text-sm font-medium tracking-wide text-white bg-red-600 rounded-full transition-all duration-300 hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/20">
+                <button 
+                  onClick={() => handleViewProject(project.id)}
+                  className="group/btn inline-flex items-center gap-2 px-6 py-3 mb-6 text-sm font-medium tracking-wide text-white bg-red-600 rounded-full transition-all duration-300 hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/20"
+                >
                   <span>VIEW</span>
                   <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />

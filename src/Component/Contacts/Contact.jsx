@@ -29,7 +29,7 @@ const ContactSection = ({
   });
 
   // Auto detect country code based on browser locale
- useEffect(() => {
+  useEffect(() => {
     const getCountryCode = async () => {
       try {
         const res = await fetch("https://ipapi.co/json/");
@@ -164,20 +164,20 @@ const ContactSection = ({
                   />
                 </div>
 
-                 <div className="form-group">
-            <label>Phone Number</label>
-            <div className="phone-input">
-              <span className="country-code">{formData.countryCode}</span>
-              <input
-                name="phone"
-                type="tel"
-                placeholder="Phone number"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
-              </div>
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <div className="phone-input">
+                    <span className="country-code">{formData.countryCode}</span>
+                    <input
+                      name="phone"
+                      type="tel"
+                      placeholder="Phone number"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
 
               </div>
 

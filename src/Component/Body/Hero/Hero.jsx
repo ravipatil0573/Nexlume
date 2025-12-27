@@ -88,7 +88,7 @@ export default function Hero() {
 
             {/* Main Heading */}
             <h1 className="hero-heading mb-4 mb-md-5">
-            Transforming ideas into digital experiences
+              Transforming ideas into digital experiences
               <br />
               with our agency<em> NexLume</em>
             </h1>
@@ -99,7 +99,7 @@ export default function Hero() {
               Welcome to 
               <span className="name-highlight"> <em>NexLume</em></span>
               </p> */}
-              {/* <div className="profile-container d-inline-flex align-items-center gap-3 mb-3">
+            {/* <div className="profile-container d-inline-flex align-items-center gap-3 mb-3">
                 <div className="profile-image-wrapper">
                   <img
                     src={profileImage}
@@ -141,7 +141,7 @@ export default function Hero() {
                 aria-label="Send email to hello@aayushbharti.in"
               >
                 <Mail size={20} className="email-icon" aria-hidden="true" />
-                <span>hello@aayushbharti.in</span>
+                <span>nexlume.co@gmail.com</span>
               </a>
             </div>
           </div>
