@@ -186,19 +186,15 @@ const TeamCard = ({
 // MAIN TEAM COMPONENT
 // =========================
 const Team = () => {
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const emailInput = e.target.previousElementSibling;
-    const email = emailInput.value.trim();
-    
+  const handleSubmit = async () => {
     if (!email) {
       alert("Please enter your email address");
       return;
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("Please enter a valid email address");
@@ -208,46 +204,31 @@ const Team = () => {
     setIsLoading(true);
 
     try {
-      const API_BASE = import.meta.env?.VITE_API_BASE || "http://localhost:5005";
-      
-      const response = await fetch(`${API_BASE}/api/team/enroll`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/team/enroll",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
 
-      // Check if response is JSON
-      const contentType = response.headers.get("content-type");
-      let data;
-      
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        // If not JSON, it's likely an HTML error page
-        const text = await response.text();
-        console.error("Non-JSON response:", text);
-        throw new Error(`Server error: ${response.status} ${response.statusText}`);
-      }
+      const data = await response.json();
 
       if (response.ok) {
-        alert(`Thank you! We've sent an email to ${email}. Please check your inbox!`);
-        emailInput.value = ""; // Clear the input
+        alert("🎉 Enrollment successful! Check your email.");
+        setEmail("");
       } else {
-        alert(data.message || `Failed to send email. Error: ${response.status}`);
+        alert(data.message || "Failed to enroll");
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-      if (error.message.includes("404")) {
-        alert("Backend route not found. Please add the /api/team/enroll route to your backend server.");
-      } else {
-        alert("Failed to send email. Please check your backend server is running and the route is configured.");
-      }
+      console.error(error);
+      alert("Backend server not reachable");
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <>
@@ -289,22 +270,24 @@ const Team = () => {
             generation of startups.
           </p>
           <div className="form-container">
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter Email Address"
-              className="email-input"
-              required
-            />
-            <button
-              type="button"
-              className="apply-button"
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? "Sending..." : "Enroll Now"}
-            </button>
-          </div>
+  <input
+    type="email"
+    placeholder="Enter Email Address"
+    className="email-input"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+  />
+
+  <button
+    type="button"
+    className="apply-button"
+    onClick={handleSubmit}
+    disabled={isLoading}
+  >
+    {isLoading ? "Sending..." : "Enroll Now"}
+  </button>
+</div>
+
           <p className="contact-info">
             Share your details at{" "}
             <Link
