@@ -3,6 +3,8 @@ import "./Team.css";
 import { Link } from "react-router-dom";
 import { FaLinkedin } from "react-icons/fa";
 import { gsap } from "gsap";
+import API_BASE from "../../lib/api";
+
 
 // Import images
 import Nikhil from "../../assets/Team/messa.jpg";

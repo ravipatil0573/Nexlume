@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Project.css";
+import API_BASE from "../../lib/api";
+
 
 // ============================================
 // PROJECTS SECTION - START
@@ -35,7 +37,7 @@ const techIcons = {
 };
 
 // 👉 Backend base URL (set VITE_API_BASE in your frontend .env to override)
-const API_BASE = import.meta.env?.VITE_API_BASE || "http://localhost:5000";
+
 
 const ProjectCard = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);

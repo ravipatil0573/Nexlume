@@ -4,6 +4,7 @@ import SafarnamaVideo from "../../../assets/Video/SafarNamaVideo.mp4";
 import NexshowVideo from "../../../assets/Video/NexShow.mp4";
 import StyloraVideo from "../../../assets/Video/StyloraVideo.mp4";
 
+
 // 👉 Backend base URL (set VITE_API_BASE in your frontend .env to override)
 const API_BASE = import.meta.env?.VITE_API_BASE || "http://localhost:5000";
 
@@ -143,7 +144,7 @@ const ProjectsSection = () => {
 
         {/* Project Cards */}
         <div className="max-w-5xl mx-auto space-y-6 md:space-y-10 lg:space-y-14">
-          {projects.map((project, index) => (
+          {projects.slice(0, 3).map((project, index) => (
             <div
               key={index}
               className="group relative bg-[#0a0a0a] border border-[#C80000]/50 rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden transition-all duration-500 ease-out hover:border-[#C80000] hover:shadow-2xl hover:shadow-red-500/10 hover:-translate-y-1"
