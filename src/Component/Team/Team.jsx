@@ -17,7 +17,7 @@ import GroupImage from "../../assets/Team/group-image.jpg";
 import TeamEmailImage from "../../assets/Team/team-email.jpg";
 
 // =========================
-// TEAM DATA
+// TEAM DATA (fallback demo)
 // Image Size 244.64 x 250
 // =========================
 const demo = [
@@ -190,6 +190,30 @@ const TeamCard = ({
 const Team = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [members, setMembers] = useState(demo);
+
+  // Fetch team members from backend (fallback to demo on failure)
+  useEffect(() => {
+    let isMounted = true;
+    const loadTeams = async () => {
+      if (!API_BASE) return;
+      try {
+        const res = await fetch(`${API_BASE}/api/teams`);
+        const json = await res.json();
+        const list = Array.isArray(json) ? json : json.data || [];
+        if (isMounted && list.length) {
+          setMembers(list);
+        }
+      } catch (err) {
+        console.error("Failed to load teams:", err);
+        if (isMounted) setMembers(demo);
+      }
+    };
+    loadTeams();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSubmit = async () => {
     if (!email) {
@@ -206,14 +230,15 @@ const Team = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/team/enroll",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const endpoint = API_BASE
+        ? `${API_BASE}/api/team/enroll`
+        : "http://localhost:5000/api/team/enroll";
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
       const data = await response.json();
 
@@ -257,7 +282,7 @@ const Team = () => {
           <h2 className="header-team text-center">
             The People Behind the Vision
           </h2>
-          <TeamCard items={demo} />
+          <TeamCard items={members} />
         </div>
       </section>
 
