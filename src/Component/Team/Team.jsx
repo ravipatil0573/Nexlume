@@ -3,7 +3,10 @@ import "./Team.css";
 import { Link } from "react-router-dom";
 import { FaLinkedin } from "react-icons/fa";
 import { gsap } from "gsap";
-import API_BASE from "../../lib/api";
+import API from "../../lib/api";
+
+// const API_BASE = "http://localhost:5000";
+
 
 
 // Import images
@@ -205,32 +208,28 @@ const Team = () => {
 
     setIsLoading(true);
 
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/team/enroll",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
+  try {
+  const response = await fetch(`${API.main}/api/team/enroll`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
 
-      const data = await response.json();
+  const data = await response.json();
 
-      if (response.ok) {
-        alert("🎉 Enrollment successful! Check your email.");
-        setEmail("");
-      } else {
-        alert(data.message || "Failed to enroll");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Backend server not reachable");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  if (!response.ok) {
+    console.error("Server error:", data);
+    alert(data.message || "Something went wrong");
+    return;
+  }
 
+  alert("Email sent successfully!");
+} catch (error) {
+  console.error("Fetch failed:", error);
+  alert("Network error");
+}}
 
   return (
     <>

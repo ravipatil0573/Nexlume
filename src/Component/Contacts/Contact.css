@@ -184,6 +184,22 @@ hr {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Dropdown options styling - black background */
+.form-group select option {
+  background: #000000 !important;
+  color: #ffffff !important;
+  padding: 10px;
+}
+
+/* Ensure dropdown list has black background */
+.form-group select {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: rgba(255, 255, 255, 0.4);

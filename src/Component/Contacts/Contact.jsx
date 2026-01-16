@@ -7,6 +7,7 @@ const defaultSocialLinks = [
   { id: "3", name: "LinkedIn", iconSrc: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg", href: "https://www.linkedin.com/in/nexlume-co-463256384/" },
 ];
 
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 
 const ContactSection = ({
@@ -66,11 +67,35 @@ const ContactSection = ({
     });
   };
 
-  const handleSubmit = (e) => {
+   // 🔥 ONLY THIS FUNCTION WAS UPDATED
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Submitted:", formData);
+
+    try {
+      const response = await fetch(`${API_BASE}/api/contact/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Something went wrong");
+        return;
+      }
+
+      alert("Message sent successfully!");
+    } catch (error) {
+      console.error("Fetch failed:", error);
+      alert("Network error");
+    }
+
+    // ⬇️ ORIGINAL LOGIC KEPT (unchanged)
     if (onSubmit) onSubmit(formData);
   };
+
 
   const serviceOptions = [
     "Website",

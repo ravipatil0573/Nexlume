@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Project.css";
-import API_BASE from "../../lib/api";
+import API from "../../lib/api";
 
 
 // ============================================
@@ -139,24 +139,29 @@ const ProjectCard = ({ project }) => {
 export default function Projects() {
   const [projects, setProjects] = useState([]);
 
-  useEffect(() => {
-    let isMounted = true;
-    fetch(`${API_BASE}/api/projects`)
-      .then((r) => r.json())
-      .then((json) => {
-        // backend returns { data: [...] }
-        const list = Array.isArray(json) ? json : json.data || [];
-        if (isMounted) setProjects(list);
-      })
-      .catch((e) => {
-        console.error("Failed to load projects:", e);
-        if (isMounted) setProjects([]);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+useEffect(() => {
+  let isMounted = true;
 
+  fetch(`${API.main}/api/projects`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      const list = Array.isArray(json) ? json : json.data || [];
+      if (isMounted) setProjects(list);
+    })
+    .catch((e) => {
+      console.error("❌ Failed to load projects:", e.message);
+      if (isMounted) setProjects([]);
+    });
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
   return (
     <div className="projects-section">
       <div className="projects-wrapper">
