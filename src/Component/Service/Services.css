@@ -1459,7 +1459,6 @@
    ============================================== */
 
 .faq-card {
-<<<<<<< HEAD
   position: absolute;
   width: 280px;
   height: 120px;
@@ -1500,33 +1499,6 @@
   opacity: 0;
   transition: opacity 0.6s ease;
   pointer-events: none;
-=======
-    position: absolute;
-    width: 280px;
-    height: 120px;
-    background: linear-gradient( 135deg, rgba(255, 99, 132, 0.3) 0%, rgba(255, 71, 87, 0.24) 45%, rgba(0, 0, 0, 0.32) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.38), 0 0 40px rgba(255, 59, 59, 0.32), 0 0 60px rgba(255, 99, 132, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.12);
-    transform-style: preserve-3d;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-}
-
-.faq-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient( 135deg, rgba(255, 99, 132, 0.18) 0%, transparent 50%, rgba(0, 0, 0, 0.28) 100%);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 }
 
 .faq-card:hover::before {
@@ -1534,7 +1506,6 @@
 }
 
 .faq-card:hover {
-<<<<<<< HEAD
   transform: translateY(-8px) translateZ(20px) rotateX(2deg);
   box-shadow: 
     0 16px 48px rgba(0, 0, 0, 0.4),
@@ -1558,21 +1529,6 @@
   );
   animation: glowPulse 4s ease-in-out infinite;
   pointer-events: none;
-=======
-    transform: translateY(-8px) translateZ(20px) rotateX(2deg);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45), 0 0 60px rgba(255, 59, 59, 0.4), 0 0 90px rgba(255, 99, 132, 0.3), 0 0 120px rgba(0, 0, 0, 0.25);
-}
-
-.card-glow {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient( circle, rgba(255, 99, 132, 0.35) 0%, rgba(255, 71, 87, 0.25) 30%, rgba(255, 35, 100, 0.16) 60%, transparent 100%);
-    animation: glowPulse 4s ease-in-out infinite;
-    pointer-events: none;
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 }
 
 @keyframes glowPulse {
@@ -1599,7 +1555,6 @@
 }
 
 .card-icon {
-<<<<<<< HEAD
   font-size: 48px;
   font-weight: 700;
   background: linear-gradient(
@@ -1614,17 +1569,6 @@
   text-shadow: 0 0 30px rgba(200, 0, 0, 0.5);
   margin-bottom: 8px;
   filter: drop-shadow(0 0 10px rgba(200, 0, 0, 0.6));
-=======
-    font-size: 48px;
-    font-weight: 700;
-    background: linear-gradient( 135deg, #ff6b6b 0%, #ff3b30 45%, #ff2d55 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 30px rgba(255, 71, 87, 0.55);
-    margin-bottom: 8px;
-    filter: drop-shadow(0 0 10px rgba(255, 71, 87, 0.6));
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 }
 
 .card-title {
@@ -1697,7 +1641,6 @@
    ============================================== */
 
 .particle {
-<<<<<<< HEAD
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(
@@ -1710,13 +1653,6 @@
     0 0 20px rgba(200, 0, 0, 0.6),
     0 0 40px rgba(200, 0, 0, 0.4);
   pointer-events: none;
-=======
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient( circle, rgba(138, 43, 226, 0.8) 0%, rgba(74, 144, 226, 0.6) 50%, transparent 100%);
-    box-shadow: 0 0 20px rgba(138, 43, 226, 0.6), 0 0 40px rgba(74, 144, 226, 0.4);
-    pointer-events: none;
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 }
 
 .particle-1 {
@@ -1853,7 +1789,6 @@
    ============================================== */
 
 .floating-line {
-<<<<<<< HEAD
   position: absolute;
   background: linear-gradient(
     90deg,
@@ -1864,13 +1799,6 @@
   height: 1px;
   pointer-events: none;
   filter: blur(1px);
-=======
-    position: absolute;
-    background: linear-gradient( 90deg, transparent 0%, rgba(138, 43, 226, 0.4) 50%, transparent 100%);
-    height: 1px;
-    pointer-events: none;
-    filter: blur(1px);
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 }
 
 .line-1 {
@@ -1941,7 +1869,6 @@
    ============================================== */
 
 .ambient-sphere {
-<<<<<<< HEAD
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(
@@ -1953,14 +1880,6 @@
   filter: blur(40px);
   pointer-events: none;
   animation: ambientPulse 6s ease-in-out infinite;
-=======
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient( circle, rgba(138, 43, 226, 0.3) 0%, rgba(74, 144, 226, 0.2) 40%, transparent 70%);
-    filter: blur(40px);
-    pointer-events: none;
-    animation: ambientPulse 6s ease-in-out infinite;
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 }
 
 .sphere-1 {
