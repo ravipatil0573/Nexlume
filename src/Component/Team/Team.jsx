@@ -5,8 +5,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { gsap } from "gsap";
 import API from "../../lib/api";
 
-const API_BASE = API.email || "http://localhost:5001"; // Port 5001 for team enrollment
-
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 
 // Import images
@@ -258,8 +257,7 @@ const Team = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
+  }
   return (
     <>
       <section id="team" className="team-body">
