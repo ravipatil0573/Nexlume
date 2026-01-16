@@ -245,6 +245,33 @@ p {
   line-height: var(--line-height-relaxed);
   color: var(--text-secondary);
   max-width: 900px;
+  margin-bottom: var(--space-2xl); /* Proper spacing before image */
+}
+
+.section-content p {
+  margin-bottom: var(--space-md);
+  color: var(--text-secondary);
+}
+
+.section-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Extra spacing when description is followed by image */
+.section-content + .image-banner {
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-4xl);
+}
+
+/* When image comes before description, add significant space above */
+.image-banner + .content-section,
+.image-banner + section {
+  margin-top: var(--space-4xl) !important;
+  padding-top: var(--space-4xl) !important;
+}
+
+.image-banner + .section-content {
+  margin-top: var(--space-4xl) !important;
 }
 
 /* --------------------------------------------
@@ -403,7 +430,8 @@ p {
    Image Banner
    -------------------------------------------- */
 .image-banner {
-  margin-bottom: var(--space-3xl);
+  margin-top: var(--space-2xl); /* Space above image */
+  margin-bottom: var(--space-4xl) !important; /* Increased space below image for better separation */
 }
 
 .image-wrapper {
@@ -804,36 +832,215 @@ p {
 /* --------------------------------------------
    Responsive Design
    -------------------------------------------- */
+
+/* Mobile Devices (up to 599px) */
 @media (max-width: 599px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-    width: 90%;
-    margin: 0 auto;
-    padding: var(--space-sm);
-  }
-
-  .magic-bento-card {
-    width: 100%;
-    min-height: 180px;
-  }
-
-  .feature-grid,
-  .tech-stack-grid {
-    grid-template-columns: 1fr;
-  }
-
+  /* Container adjustments */
   .project-content-wrapper {
     padding: 0 var(--space-md);
   }
 
+  /* Hero Section */
   .hero-section {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-xl);
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-lg);
   }
 
+  .hero-title {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+    margin-bottom: var(--space-md);
+    line-height: 1.3;
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Image Banner - Better spacing around image on mobile */
+  .image-banner {
+    margin-top: var(--space-xl); /* Space above image (after description) */
+    margin-bottom: var(--space-2xl) !important; /* Increased space below image on mobile */
+  }
+
+  .image-wrapper {
+    border-radius: var(--radius-lg);
+    padding: 1px;
+  }
+
+  .image-inner {
+    border-radius: var(--radius-lg);
+  }
+
+  .image-banner img {
+    max-height: 300px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Content Sections */
   .content-section {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-xl);
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .section-title {
+    font-size: var(--font-size-lg);
+    padding-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .section-content {
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+    margin-bottom: var(--space-xl); /* Space before image on mobile */
+  }
+
+  /* Description styling - Better readability on mobile */
+  .section-content p {
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+    color: var(--text-secondary);
+  }
+
+  /* Extra spacing when description is followed by image on mobile */
+  .section-content + .image-banner {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  /* When image comes before description, add significant space above on mobile */
+  .image-banner + .content-section,
+  .image-banner + section {
+    margin-top: var(--space-2xl) !important;
+    padding-top: var(--space-2xl) !important;
+  }
+
+  .image-banner + .section-content {
+    margin-top: var(--space-2xl) !important;
+  }
+
+  /* Cards Grid */
+  .card-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .magic-bento-card {
+    width: 100%;
+    min-height: 160px;
+    padding: 1em;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Feature & Tech Grids */
+  .feature-grid,
+  .tech-stack-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .feature-card,
+  .tech-card {
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Tech Badges */
+  .tech-badge {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Sidebar Navigation - Hide on mobile */
+  .sidebar-nav {
+    display: none;
+  }
+
+  /* Action Buttons */
+  .action-button {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--font-size-sm);
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Better spacing for paragraphs after images */
+  .image-banner + .content-section,
+  .image-banner + .section-content {
+    margin-top: var(--space-xl);
+  }
+
+  /* Typography improvements for mobile */
+  h1, h2, h3 {
+    line-height: 1.3;
+    margin-bottom: var(--space-sm);
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+
+  h2 {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+  }
+
+  h3 {
+    font-size: clamp(1.1rem, 3vw, 1.25rem);
+  }
+
+  /* Paragraph spacing */
+  p {
+    margin-bottom: var(--space-md);
+  }
+
+  /* Last paragraph doesn't need bottom margin */
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Tablet Devices (600px - 767px) */
+@media (min-width: 600px) and (max-width: 767px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .image-banner {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .image-banner img {
+    max-height: 400px;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+  }
+
+  .section-content {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* Small Desktop / Large Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .project-content-wrapper {
+    padding: 0 var(--space-xl);
+  }
+
+  .image-banner img {
+    max-height: 500px;
+  }
+
+  .feature-grid,
+  .tech-stack-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

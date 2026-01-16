@@ -7,6 +7,185 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 const API_BASE = import.meta.env?.VITE_API_BASE || "http://localhost:5000";
 
 // -------------------------------------------
+// Tech Icons Mapping
+// -------------------------------------------
+const techIcons = {
+  // JavaScript & TypeScript
+  JavaScript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  TypeScript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+  
+  // Frontend Frameworks
+  React: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  "Next.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+  Vue: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
+  Angular: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg",
+  Svelte: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg",
+  
+  // CSS Frameworks
+  "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg",
+  Bootstrap: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
+  "Material-UI": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg",
+  Sass: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg",
+  Less: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/less/less-plain-wordmark.svg",
+  CSS3: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  HTML5: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+  
+  // Backend & Runtime
+  "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+  Node: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+  NodeJS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+  Express: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+  "Express.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+  NestJS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg",
+  "ASP.NET": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg",
+  ASPNET: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg",
+  ".NET": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg",
+  DotNet: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg",
+  
+  // Databases
+  MongoDB: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+  MySQL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+  PostgreSQL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+  Postgres: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+  SQLite: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg",
+  "SQL Server": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg",
+  SQLServer: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg",
+  MSSQL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg",
+  Redis: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
+  Firebase: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+  Supabase: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/supabase.svg",
+  
+  // Cloud & Hosting
+  Vercel: "https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_dark_background.png",
+  AWS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg",
+  Azure: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg",
+  Heroku: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/heroku/heroku-original.svg",
+  Netlify: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/netlify/netlify-original.svg",
+  Docker: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+  Kubernetes: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg",
+  
+  // Tools & Libraries
+  "Socket.io": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg",
+  SocketIO: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg",
+  "Framer Motion": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/framermotion/framermotion-original.svg",
+  "Motion.dev": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/framermotion/framermotion-original.svg",
+  GraphQL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg",
+  REST: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/swagger.svg",
+  "REST API": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/swagger.svg",
+  RestAPI: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/swagger.svg",
+  RESTful: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/swagger.svg",
+  API: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/swagger.svg",
+  Swagger: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/swagger.svg",
+  Redux: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg",
+  Zustand: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zustand.svg",
+  GSAP: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gsap.svg",
+  ThreeJS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+  "Three.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg",
+  
+  // Programming Languages
+  Python: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+  Java: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+  "C++": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
+  C: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg",
+  "C#": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg",
+  Go: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg",
+  Rust: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-plain.svg",
+  PHP: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg",
+  Ruby: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg",
+  Swift: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg",
+  Kotlin: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg",
+  Dart: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg",
+  
+  // Mobile Development
+  ReactNative: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  Flutter: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",
+  Ionic: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg",
+  
+  // Testing
+  Jest: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg",
+  Cypress: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cypressio/cypressio-original.svg",
+  Mocha: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mocha/mocha-plain.svg",
+  
+  // Build Tools
+  Webpack: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webpack/webpack-original.svg",
+  Vite: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg",
+  Babel: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg",
+  Gulp: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gulp/gulp-plain.svg",
+  
+  // Version Control
+  Git: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+  GitHub: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  GitLab: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg",
+  Bitbucket: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bitbucket/bitbucket-original.svg",
+  
+  // Other Technologies
+  Nginx: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg",
+  Apache: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original.svg",
+  Linux: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
+  Ubuntu: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-plain.svg",
+  Windows: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg",
+  
+  // Design Tools
+  Figma: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+  Adobe: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/adobe/adobe-original.svg",
+  Photoshop: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg",
+  Illustrator: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg",
+  
+  // Common Variations & Abbreviations
+  JS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  TS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+  HTML: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+  CSS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  "Responsive Design": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  Responsive: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  "UI/UX": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/figma.svg",
+  UI: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/figma.svg",
+  UX: "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/figma.svg",
+  Animations: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/framermotion/framermotion-original.svg",
+  Animation: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/framermotion/framermotion-original.svg",
+  
+  // Additional Technologies
+  "Enterprise App": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg",
+  Enterprise: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg",
+  Spring: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg",
+  Django: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg",
+  Flask: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg",
+  Laravel: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg",
+  "React Native": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  RN: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+};
+
+// Helper function to get icon URL with multiple matching strategies
+const getTechIcon = (tag) => {
+  const cleanTag = tag?.trim() || "";
+  if (!cleanTag) return null;
+  
+  // Exact match
+  if (techIcons[cleanTag]) return techIcons[cleanTag];
+  
+  // Case-insensitive match
+  const caseInsensitiveMatch = Object.keys(techIcons).find(
+    (key) => key.toLowerCase() === cleanTag.toLowerCase()
+  );
+  if (caseInsensitiveMatch) return techIcons[caseInsensitiveMatch];
+  
+  // Try variations
+  const variations = [
+    cleanTag.replace(/\./g, ''),
+    cleanTag.replace(/\s+/g, ''),
+    cleanTag.replace(/\s+/g, '-'),
+    cleanTag.replace(/\s+/g, '.'),
+    cleanTag.replace(/\./g, '-'),
+  ];
+  
+  for (const variant of variations) {
+    if (techIcons[variant]) return techIcons[variant];
+  }
+  
+  return null;
+};
+
+// -------------------------------------------
 // Utilities
 // -------------------------------------------
 const extractColorFromGradient = (g) => {
@@ -329,21 +508,39 @@ export default function ProjectDetails() {
                 {/* Tech Stack Badges */}
                 {techStack.length > 0 && (
                   <div className="d-flex flex-wrap gap-2 mb-4">
-                    {techStack.slice(0, 8).map((tech, idx) => (
-                      <span
-                        key={idx}
-                        className="badge px-3 py-2 rounded-pill"
-                        style={{
-                          backgroundColor: "rgba(255, 255, 255, 0.05)",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          color: "#EDEDED",
-                          fontSize: "0.875rem",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    {techStack.slice(0, 8).map((tech, idx) => {
+                      const iconUrl = getTechIcon(tech);
+                      return (
+                        <span
+                          key={idx}
+                          className="badge px-3 py-2 rounded-pill d-flex align-items-center gap-2"
+                          style={{
+                            backgroundColor: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            color: "#EDEDED",
+                            fontSize: "0.875rem",
+                            fontWeight: 400,
+                          }}
+                        >
+                          {iconUrl && (
+                            <img 
+                              src={iconUrl} 
+                              alt={tech} 
+                              style={{
+                                width: "16px",
+                                height: "16px",
+                                objectFit: "contain",
+                              }}
+                              loading="lazy"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          )}
+                          {tech}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
 
@@ -581,12 +778,37 @@ export default function ProjectDetails() {
                             height: "40px",
                             backgroundColor: "rgba(255, 255, 255, 0.05)",
                             flexShrink: 0,
+                            overflow: "hidden",
                           }}
                         >
-                          <i
-                            className="bi bi-code-slash"
-                            style={{ color: "#00F0FF" }}
-                          ></i>
+                          {(() => {
+                            const iconUrl = getTechIcon(tech);
+                            return iconUrl ? (
+                              <img
+                                src={iconUrl}
+                                alt={tech}
+                                style={{
+                                  width: "28px",
+                                  height: "28px",
+                                  objectFit: "contain",
+                                }}
+                                loading="lazy"
+                                onError={(e) => {
+                                  // Fallback to code icon if logo fails to load
+                                  e.target.style.display = 'none';
+                                  const parent = e.target.parentElement;
+                                  if (parent) {
+                                    parent.innerHTML = '<i class="bi bi-code-slash" style="color: #00F0FF"></i>';
+                                  }
+                                }}
+                              />
+                            ) : (
+                              <i
+                                className="bi bi-code-slash"
+                                style={{ color: "#00F0FF" }}
+                              ></i>
+                            );
+                          })()}
                         </div>
                         <div>
                           <h6

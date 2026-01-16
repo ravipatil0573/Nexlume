@@ -374,7 +374,7 @@ hr {
 
 @media (max-width: 1023px) and (min-width: 768px) {
     .contact-content {
-        padding: 2.5rem 1.5rem;
+        padding: 8rem 1.5rem 3rem 1.5rem;
     }
     .contact-grid {
         grid-template-columns: 1fr;
@@ -403,7 +403,7 @@ hr {
 
 @media (max-width: 767px) and (min-width: 426px) {
     .contact-content {
-        padding: 2rem 1rem;
+        padding: 7rem 1rem 2rem 1rem;
     }
     .contact-grid {
         grid-template-columns: 1fr;
@@ -438,7 +438,7 @@ hr {
 
 @media (max-width: 425px) and (min-width: 376px) {
     .contact-content {
-        padding: 1.5rem 1rem;
+        padding: 6rem 1rem 2rem 1rem;
     }
     .contact-grid {
         grid-template-columns: 1fr;
@@ -486,7 +486,7 @@ hr {
 
 @media (max-width: 375px) and (min-width: 321px) {
     .contact-content {
-        padding: 1.5rem 0.75rem;
+        padding: 6rem 0.75rem 2rem 0.75rem;
     }
     .contact-grid {
         grid-template-columns: 1fr;
@@ -548,7 +548,7 @@ hr {
 
 @media (max-width: 320px) {
     .contact-content {
-        padding: 1.25rem 0.5rem;
+        padding: 6rem 0.5rem 2rem 0.5rem;
     }
     .contact-grid {
         grid-template-columns: 1fr;
