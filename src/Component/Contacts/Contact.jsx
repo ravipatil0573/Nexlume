@@ -67,10 +67,8 @@ const ContactSection = ({
     });
   };
 
-   // 🔥 ONLY THIS FUNCTION WAS UPDATED
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
 
     try {
       const response = await fetch(`${API_BASE}/api/contact/submit`, {
@@ -82,18 +80,29 @@ const ContactSection = ({
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Something went wrong");
+        alert(data.message || "Something went wrong. Please try again.");
         return;
       }
 
-      alert("Message sent successfully!");
-    } catch (error) {
-      console.error("Fetch failed:", error);
-      alert("Network error");
-    }
+      // ✅ FREE beginner setup message
+      alert("Thanks for contacting NexLume. Our team will reach out soon.");
 
-    // ⬇️ ORIGINAL LOGIC KEPT (unchanged)
-    if (onSubmit) onSubmit(formData);
+      // OPTIONAL: reset form
+      setFormData({
+        name: "",
+        businessName: "",
+        email: "",
+        phone: "",
+        countryCode: "+91",
+        socialMedia: "",
+        budget: "",
+        services: [],
+        message: "",
+      });
+    } catch (error) {
+      console.error("Contact submit failed:", error);
+      alert("Network error. Please try again later.");
+    }
   };
 
 
