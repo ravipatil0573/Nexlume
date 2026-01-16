@@ -5,7 +5,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { gsap } from "gsap";
 import API from "../../lib/api";
 
-// const API_BASE = "http://localhost:5000";
+const API_BASE = API.email || "http://localhost:5001"; // Port 5001 for team enrollment
 
 
 
@@ -199,9 +199,10 @@ const Team = () => {
   useEffect(() => {
     let isMounted = true;
     const loadTeams = async () => {
-      if (!API_BASE) return;
+      const teamsAPI = API.main || "http://localhost:5000"; // Port 5000 for teams
+      if (!teamsAPI) return;
       try {
-        const res = await fetch(`${API_BASE}/api/teams`);
+        const res = await fetch(`${teamsAPI}/api/teams`);
         const json = await res.json();
         const list = Array.isArray(json) ? json : json.data || [];
         if (isMounted && list.length) {
@@ -232,41 +233,32 @@ const Team = () => {
 
     setIsLoading(true);
 
-<<<<<<< HEAD
-  try {
-  const response = await fetch(`${API.main}/api/team/enroll`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email }),
-  });
-=======
     try {
-      const endpoint = API_BASE
-        ? `${API_BASE}/api/team/enroll`
-        : "http://localhost:5000/api/team/enroll";
+      const endpoint = `${API_BASE}/api/team/enroll`;
 
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
->>>>>>> cb8bc2359d8f5f56135137997e8e45ce0e4ad0c9
 
-  const data = await response.json();
+      const data = await response.json();
 
-  if (!response.ok) {
-    console.error("Server error:", data);
-    alert(data.message || "Something went wrong");
-    return;
-  }
+      if (!response.ok) {
+        console.error("Server error:", data);
+        alert(data.message || "Something went wrong");
+        return;
+      }
 
-  alert("Email sent successfully!");
-} catch (error) {
-  console.error("Fetch failed:", error);
-  alert("Network error");
-}}
+      alert("Email sent successfully!");
+      setEmail(""); // Clear the input on success
+    } catch (error) {
+      console.error("Fetch failed:", error);
+      alert("Network error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
